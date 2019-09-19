@@ -1,15 +1,39 @@
 {
   "name": "simmpli-electron",
   "version": "0.0.0",
+  "description": "Angular 8 with Electron (Typescript + SASS + Hot Reload)",
+  "author": {
+    "name": "Deepak Kumar",
+    "email": "dk.kumar06@gmail.com"
+  },
+  "keywords": [
+    "angular",
+    "angular 8",
+    "electron",
+    "typescript",
+    "sass"
+  ],
+  "main": "main.js",
+  "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "npm-run-all -p ng:serve electron:serve",
+    "build": "npm run electron:serve-tsc && ng build",
+    "build:dev": "npm run build -- -c dev",
+    "build:prod": "npm run build -- -c production",
+    "ng:serve": "ng serve",
+    "ng:serve:web": "ng serve -o",
+    "electron:serve-tsc": "tsc -p tsconfig.json",
+    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
+    "electron:local": "npm run build:prod && electron .",
+    "electron:linux": "npm run build:prod && electron-builder build --linux",
+    "electron:windows": "npm run build:prod && electron-builder build --windows",
+    "electron:mac": "npm run build:prod && electron-builder build --mac",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "npm run build:prod && mocha --timeout 300000 --require ts-node/register e2e/**/*.spec.ts",
+    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "lint": "ng lint"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.0",
     "@angular/common": "~8.2.0",
@@ -28,10 +52,13 @@
     "@angular/cli": "~8.2.2",
     "@angular/compiler-cli": "~8.2.0",
     "@angular/language-service": "~8.2.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "electron": "6.0.2",
+    "electron-builder": "21.2.0",
+    "electron-reload": "^1.5.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -42,6 +69,8 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "npm-run-all": "4.1.5",
+    "wait-on": "3.3.0"
   }
 }

@@ -19,6 +19,18 @@ export class ChatService {
     this.socket.emit('username', username);
   }
 
+  connectChannel = (event) => {
+    this.socket.emit('join', event);
+  }
+
+  getChannelMsg(event) {
+    return Observable.create((observer) => {
+      this.socket.on(event.room, (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   getUserList = () => {
     return Observable.create((observer) => {
       this.socket.on('userList', (userList, socketId) => {
@@ -44,7 +56,6 @@ export class ChatService {
         observer.next(data);
       });
     });
-
   }
 
   sendMessage() {

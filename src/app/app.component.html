@@ -2,6 +2,8 @@
 <input type="text" [(ngModel)]="username">
 <button type="button" (click)="connectUser()">Connect User</button>
 
+<br>
+<button type="button" (click)="connectChannel()">Connect Channel</button>
 <div *ngFor="let u of userList">
   <a href="javascript:void(0)" (click)="selecteUser(u.id)">{{u.id}} - {{u.userName}}</a>
 </div>

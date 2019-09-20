@@ -13,6 +13,7 @@ export class AppComponent {
   selectedUser = 'deepak';
   message = '';
   username: any = '';
+  channel: any = { 'rooms': 'w3channel' };
 
   constructor(private chatService: ChatService) {
 
@@ -24,6 +25,10 @@ export class AppComponent {
 
   connectUser() {
     this.chatService.connectUser(this.username);
+  }
+
+  connectChannel() {
+    this.chatService.connectChannel(this.channel);
   }
 
   sendMsgToSpecific() {
@@ -50,6 +55,11 @@ export class AppComponent {
     this.chatService.getMsgToSpecific()
       .subscribe((msg: string) => {
         this.messageSpecific.push(msg);
+      });
+
+    this.chatService.getChannelMsg(this.channel)
+      .subscribe((msg: string) => {
+        alert(msg);
       });
 
   }

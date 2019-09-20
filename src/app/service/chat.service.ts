@@ -7,17 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class ChatService {
 
-  private url = 'https://chat-app-deepak.herokuapp.com/?token=abc';
+  private url = 'http://localhost:3000?token=abc';
   private socket;
 
   socketId: any = null;
-  username: any = 'depak kumar';
 
   constructor() {
     this.socket = io(this.url);
   }
-  connectUser = () => {
-    this.socket.emit('username', this.username);
+  connectUser = (username) => {
+    this.socket.emit('username', username);
   }
 
   getUserList = () => {
@@ -33,7 +32,7 @@ export class ChatService {
 
   sendMsgToSpecific = (selectedUser, message, username) => {
     this.socket.emit('getMsg', {
-      toid: this.socketId,
+      toid: selectedUser,
       msg: message,
       name: username
     });

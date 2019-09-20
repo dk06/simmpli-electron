@@ -11,8 +11,8 @@ export class AppComponent {
   userList: any = [];
   messageSpecific: any = [];
   selectedUser = 'deepak';
-  message = 'hello';
-  username = 'deepak kumar';
+  message = '';
+  username: any = '';
 
   constructor(private chatService: ChatService) {
 
@@ -23,12 +23,17 @@ export class AppComponent {
   }
 
   connectUser() {
-    this.chatService.connectUser();
+    this.chatService.connectUser(this.username);
   }
 
   sendMsgToSpecific() {
     var msg = this.chatService.sendMsgToSpecific(this.selectedUser, this.message, this.username);
+    this.message = '';
     console.log('msg', msg);
+  }
+
+  selecteUser(id) {
+    this.selectedUser = id;
   }
 
   ngOnInit() {

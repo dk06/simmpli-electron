@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ChatService {
 
-  private url = 'http://localhost:3000?token=abc';
+  private url = 'https://chat-app-deepak.herokuapp.com/?token=abc';
   private socket;
 
   socketId: any = null;

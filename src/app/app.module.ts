@@ -5,10 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChatService } from './service/chat.service';
+import { ChatRoomComponent } from './components/chat-room/chat-room.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ChatRoomComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

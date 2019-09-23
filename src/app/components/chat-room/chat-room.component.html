@@ -1,0 +1,25 @@
+<div #scrollMe>
+  <p>Connect user</p>
+  <input type="text" [(ngModel)]="username">
+  <button type="button" (click)="connectUser()">Connect User</button>
+
+  <br>
+  <button type="button" (click)="connectChannel()">Connect Channel</button>
+  <div *ngFor="let u of userList">
+    <a href="javascript:void(0)" (click)="selecteUser(u.id)">{{u.id}} - {{u.userName}}</a>
+  </div>
+
+  <div *ngFor="let su of messageSpecific">
+    From :- {{su.name}}
+    <br>
+    {{su.msg}}
+  </div>
+  <!-- <br>
+          <button type="button" (click)="sendMessage()">Send Message</button> -->
+  <br>
+  <br>
+  <p>Send message</p>
+  <p *ngIf="typingStatus">Typing..</p>
+  <input type="text" [(ngModel)]="message" (keyup)="typingMsg()">
+  <button type="button" (click)="sendMsgToSpecific()">SendMsgToSpecific</button>
+</div>

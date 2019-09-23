@@ -1,0 +1,22 @@
+.container-login {
+  background: #ccc;
+
+  .login-form {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    align-content: center;
+    margin: auto;
+    background: aliceblue;
+    width: 50%;
+    height: 50%;
+  }
+
+  form {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+  }
+}

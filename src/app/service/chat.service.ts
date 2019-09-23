@@ -70,4 +70,17 @@ export class ChatService {
     });
   }
 
+  typingMsg = (selectedUser) => {
+    this.socket.emit('typing', { toid: selectedUser });
+  }
+
+  typingUser = () => {
+    return Observable.create((observer) => {
+      this.socket.on('typing-event', (message) => {
+        observer.next(message);
+      });
+    });
+  }
+
+
 }

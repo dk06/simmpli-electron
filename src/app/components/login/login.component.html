@@ -1,13 +1,13 @@
 <div class="wrapper">
-  <form class="login" (ngSubmit)="login(user)">
+  <form class="login" [formGroup]="userForm" (ngSubmit)="login(userForm)">
     <p class="title">Log in</p>
     <img class="cen" src="../../../assets/image/simmpli-64x64.png">
-    <input type="text" placeholder="Username" autofocus [(ngModel)]="user.email" [ngModelOptions]="{standalone: true}">
+    <input type="email" placeholder="Username" formControlName="email" id="email" class="form-control">
     <i class="fa fa-envelope"></i>
-    <input type="password" placeholder="Password" [(ngModel)]="user.password" [ngModelOptions]="{standalone: true}">
+    <input type="password" placeholder="Password" formControlName="password" id="password" class="form-control">
     <i class="fa fa-key"></i>
     <a href="#">Forgot your password?</a>
-    <button>
+    <button type="submit">
       <span class="state">Log in</span>
     </button>
   </form>

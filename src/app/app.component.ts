@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
 import { CommonService } from './service/common.service';
+import { ApiService } from './service/api.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-root',
@@ -16,27 +18,49 @@ export class AppComponent implements OnInit {
   mentionSearch = "";
   selectedId = 0;
   channels = [];
-  user: any;
+  user: any = JSON.parse(localStorage.getItem("user"));
   urlBase = localStorage.getItem("urlBase");
   currentChannel: any;
   filteredUsers: any;
   publicChannels: any;
 
-  constructor(private commonService: CommonService, private route: Router) {
+  constructor(
+    private commonService: CommonService,
+    private route: Router,
+    private api: ApiService
+  ) {
 
   }
   ngOnInit() {
     this.commonService.loggedIn.subscribe((val: boolean) => {
       this.isLoggedIn = val;
+      if (this.isLoggedIn) {
+        this.getUsers();
+      } else {
+        this.route.navigate(['/login']);
+      }
     });
   }
 
 
   logOut() {
     this.commonService.logout();
+    localStorage.clear();
     this.route.navigate(['/login']);
   }
 
+
+  getUsers() {
+    this.api.getUsers().subscribe(async (response) => {
+      if (response.success) {
+        this.filteredUsers = await response.profiles.filter((user) => {
+          return (this.user.current_profile.id != user.id);
+        });;
+      }
+    }, error => {
+      console.log('error', error);
+    })
+  }
   // privateChannels = channels.filter(channel => {
   //   return !!(channel.channel_type === "private");
   // });

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/service/common.service';
 import { ApiService } from 'src/app/service/api.service';
+import { ValidationService } from 'src/app/service/validation.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,23 +11,29 @@ import { ApiService } from 'src/app/service/api.service';
 })
 export class LoginComponent implements OnInit {
 
-  user: any = {
-    email: '',
-    password: ''
-  };
+  userForm: any;
 
   constructor(
     private route: Router,
     private commonService: CommonService,
-    private api: ApiService
-  ) { }
+    private api: ApiService,
+    private formBuilder: FormBuilder
+  ) {
+    this.userForm = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['', [Validators.required, ValidationService.emailValidator]]
+    });
+  }
 
   ngOnInit() {
 
   }
 
   login() {
-    this.api.login(this.user).subscribe((response) => {
+    if (!this.userForm.value.email && !this.userForm.value.email) {
+      return;
+    }
+    this.api.login(this.userForm.value).subscribe((response) => {
       if (response.success) {
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('auth_token', response.authorization.token);

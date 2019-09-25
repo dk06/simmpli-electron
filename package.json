@@ -1,11 +1,7 @@
 {
   "name": "simmpli-electron",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Angular 8 with Electron (Typescript + SASS + Hot Reload)",
-  "author": {
-    "name": "Deepak Kumar",
-    "email": "dk.kumar06@gmail.com"
-  },
   "keywords": [
     "angular",
     "angular 8",
@@ -34,16 +30,26 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint"
   },
+  "repository": "https://github.com/w3villa/simmpli-electron",
+  "email": "deepak.kumar@w3villa.com",
+  "author": "GitHub <deepak.kumar@w3villa.com>",
   "dependencies": {
     "@angular/animations": "~8.2.0",
     "@angular/common": "~8.2.0",
     "@angular/compiler": "~8.2.0",
     "@angular/core": "~8.2.0",
     "@angular/forms": "~8.2.0",
+    "@angular/http": "^7.2.15",
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
-    "rxjs": "~6.4.0",
+    "bootstrap": "^4.3.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.4.1",
+    "ng6-toastr-notifications": "^1.0.4",
+    "roboto-fontface": "^0.10.0",
+    "rxjs": "^6.4.0",
+    "rxjs-compat": "^6.5.3",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -73,5 +79,62 @@
     "typescript": "~3.5.3",
     "npm-run-all": "4.1.5",
     "wait-on": "3.3.0"
+  },
+  "build": {
+    "appId": "com.simmpli.app",
+    "asar": false,
+    "publish": {
+      "provider": "github",
+      "owner": "w3villa",
+      "repo": "simmpli-electron",
+      "token": "54186f361dfc21f08d1707f20429afc68c7c0236"
+    },
+    "directories": {
+      "output": "release",
+      "buildResources": "./build"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "./build/icon.icns",
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "./build/icon.ico",
+      "publisherName": "Scrimba AS",
+      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp"
+    },
+    "nsis": {
+      "installerIcon": "./build/icon.ico",
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "artifactName": "${productName}Setup.${ext}"
+    },
+    "dmg": {
+      "icon": "./build/icon.icns",
+      "artifactName": "${productName}Setup.${ext}"
+    },
+    "appImage": {
+      "artifactName": "${productName}Setup.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development"
+    },
+    "protocols": [
+      {
+        "name": "simmpli",
+        "role": "Viewer",
+        "schemes": [
+          "simmpli"
+        ]
+      }
+    ]
   }
 }

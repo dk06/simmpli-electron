@@ -1,0 +1,334 @@
+.slider {
+  width: 200px;
+  height: 20px;
+  background-color: #ddd;
+  position: absolute;
+  margin-top: calc(50vh - 10px);
+  border-radius: 100px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.slider:after {
+  border-radius: 100px;
+  content: "";
+  position: absolute;
+  background-color: #fff;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  right: 360px;
+  animation-name: slide;
+  animation-duration: 2s;
+  /* animation-easing-function: linear; */
+  animation-iteration-count: infinite;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slide {
+  0% {
+    right: 180px;
+    left: 2px;
+  }
+
+  5% {
+    left: 2px;
+  }
+
+  50% {
+    right: 2px;
+    left: 180px;
+  }
+
+  55% {
+    right: 2px;
+  }
+
+  100% {
+    right: 180px;
+    left: 2px;
+  }
+}
+
+.loader {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.bottom-menu {
+  width: 260px;
+  /* background: #4D5250; */
+  margin-bottom: 10px;
+}
+
+.header-menu i {
+  color: rgb(202, 203, 203);
+  font-size: 12px;
+  float: right;
+  padding-right: 20px;
+  padding-top: 20px;
+  cursor: pointer;
+}
+
+.page-wrapper .sidebar-wrapper,
+.sidebar-wrapper .sidebar-brand>a,
+.sidebar-wrapper ul li a i,
+.page-wrapper .page-content,
+.sidebar-wrapper .sidebar-menu ul li a {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+/*----------------page-wrapper----------------*/
+
+.page-wrapper {
+  height: 100vh;
+}
+
+.page-wrapper .theme {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.page-wrapper .theme.color-theme {
+  background: #1d1d1d;
+}
+
+/*----------------toggeled sidebar----------------*/
+
+.page-wrapper.toggled .sidebar-wrapper {
+  left: 0px;
+}
+
+@media screen and (min-width: 768px) {
+  .page-wrapper.toggled .page-content {
+    padding-left: 260px;
+  }
+}
+
+/*----------------sidebar-wrapper----------------*/
+
+.sidebar-wrapper {
+  width: 260px;
+  height: 100%;
+  max-height: 100%;
+  position: fixed;
+  top: 0;
+  left: -300px;
+  z-index: 999;
+}
+
+.sidebar-wrapper ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-wrapper a {
+  text-decoration: none;
+}
+
+/*----------------sidebar-content----------------*/
+
+.sidebar-content {
+  max-height: calc(100% - 30px);
+  height: calc(100% - 30px);
+  overflow-y: hidden;
+  position: relative;
+}
+
+.sidebar-content.desktop {
+  overflow-y: hidden;
+}
+
+/*--------------------sidebar-brand----------------------*/
+
+.sidebar-wrapper .sidebar-brand {
+  padding: 10px 20px;
+  /* background: #4D5250; */
+  width: 260px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-wrapper .sidebar-brand>a {
+  text-transform: uppercase;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+/*--------------------sidebar-header----------------------*/
+
+.sidebar-wrapper .sidebar-header {
+  padding: 20px;
+  margin-top: 32px;
+  overflow: hidden;
+}
+
+.sidebar-wrapper .sidebar-header .user-pic {
+  float: left;
+  width: 60px;
+  border-radius: 37px;
+  margin-right: 15px;
+  overflow: hidden;
+  height: 60px;
+}
+
+.sidebar-wrapper .sidebar-header .user-pic img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar-wrapper .sidebar-header .user-info {
+  float: left;
+}
+
+.sidebar-wrapper .sidebar-header .user-info>span {
+  display: block;
+}
+
+.sidebar-wrapper .sidebar-header .user-info .user-role {
+  font-size: 12px;
+}
+
+.sidebar-wrapper .sidebar-header .user-info .user-status {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.sidebar-wrapper .sidebar-header .user-info .user-status i {
+  font-size: 8px;
+  margin-right: 4px;
+  color: #5cb85c;
+}
+
+/*----------------------sidebar-menu-------------------------*/
+
+.sidebar-wrapper .sidebar-menu {
+  padding-bottom: 10px;
+  max-height: calc(100% - 145px);
+  overflow-y: auto;
+}
+
+.sidebar-menu ul {
+  margin-bottom: 30px
+}
+
+.sidebar-wrapper .sidebar-menu .header-menu span {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 15px 20px 5px 20px;
+  display: inline-block;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a {
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+  position: relative;
+  padding: 5px 0 5px 12px;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a i {
+  margin-right: 10px;
+  font-size: 12px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a:hover>i::before {
+  display: inline-block;
+  animation: swing ease-in-out 0.5s 1 alternate;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a span.label,
+.sidebar-wrapper .sidebar-menu ul li a span.badge {
+  float: right;
+  margin-top: 8px;
+  margin-left: 5px;
+}
+
+
+/*--------------------------page-content-----------------------------*/
+
+.page-wrapper .page-content {
+  display: inline-block;
+  width: 100%;
+  padding-left: 0px;
+  padding-top: 20px;
+}
+
+.page-wrapper .page-content {
+  overflow-x: hidden;
+}
+
+/*-----------------------------color-theme-------------------------------------------------*/
+
+.color-theme .sidebar-wrapper {
+  background: #00585d;
+}
+
+.color-theme .sidebar-wrapper .sidebar-header,
+.color-theme .sidebar-wrapper .sidebar-menu {
+  /* border-top: 1px solid #2b2b2b; */
+}
+
+.color-theme .sidebar-wrapper .sidebar-header .user-info .user-role,
+.color-theme .sidebar-wrapper .sidebar-header .user-info .user-status,
+.color-theme .sidebar-wrapper .sidebar-brand>a,
+.color-theme .sidebar-wrapper .sidebar-menu ul li a {
+  color: #bdbdbd;
+}
+
+.color-theme .sidebar-wrapper .sidebar-menu ul li:hover>a,
+.color-theme .sidebar-wrapper .sidebar-header .user-info,
+.color-theme .sidebar-wrapper .sidebar-brand>a:hover {
+  color: #ffffff;
+}
+
+.color-theme .sidebar-wrapper ul li:hover a i {
+  color: #ffffff;
+}
+
+.color-theme .sidebar-wrapper ul li a.active {
+  color: #ffffff;
+}
+
+.color-theme .sidebar-wrapper .sidebar-menu .header-menu span {
+  color: rgb(202, 203, 203);
+  font-weight: bold;
+  font-size: 16px;
+
+}
+
+.msg-count {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 21px;
+  width: 17px;
+  height: 17px;
+  font-size: 10px;
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}

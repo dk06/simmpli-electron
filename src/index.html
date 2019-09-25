@@ -8,10 +8,23 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
 </head>
 
 <body>
   <app-root></app-root>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"
+    integrity="sha256-OgiHfllOBEOiWQ2OcBsDncRG2k7QBW9Rs1dB7MH2N2s=" crossorigin="anonymous"></script>
+    <script src="assets/js/w3sockets.js"></script>
+  <script>
+    if (window.module) module = window.module;
+    const public_key = '8d957c23bd07b26295fb35077c010681f9db01be7c89674729e22c785211637b';
+    w3socket = new W3sockets(public_key);
+    w3channel = w3socket.subscribe('simmpli-chat');
+
+  </script>
+
 </body>
 
 </html>

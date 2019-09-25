@@ -2,8 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommonService } from './service/common.service';
 import { ChatService } from './service/chat.service';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { LoginComponent } from './components/login/login.component';
@@ -18,9 +20,10 @@ import { LoginComponent } from './components/login/login.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpModule
   ],
-  providers: [ChatService],
+  providers: [CommonService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,25 +1,235 @@
-<div #scrollMe>
-  <p>Connect user</p>
-  <input type="text" [(ngModel)]="username">
-  <button type="button" (click)="connectUser()">Connect User</button>
-
-  <br>
-  <button type="button" (click)="connectChannel()">Connect Channel</button>
-  <div *ngFor="let u of userList">
-    <a href="javascript:void(0)" (click)="selecteUser(u.id)">{{u.id}} - {{u.userName}}</a>
+<div class="chat-header clearfix fixed-top">
+  <div class="chat-about">
+    <div class="chat-with" *ngIf="channel.name">{{channel.name.split(', ')[1]}}</div>
+    <div class="chat-with" *ngIf="!channel.name"># {{channel.name}}</div>
+    <div class="chat-details">
+      <div *ngIf="!channel.name">
+        <!-- <i class="fas fa-user"></i> <a href="#" title="View member list">{{channel.channel_profiles.length}}</a> | -->
+        <i class="fas fa-thumbtack"></i> 0 | <a><i class="fas fa-pen"></i></a>
+      </div>
+      <div *ngIf="channel.name">
+        <i class="fa fa-circle custom-online" *ngIf="!user.online"></i>
+        <i class="fa fa-circle custom-online" *ngIf="user.online" style="color:green"></i>
+        | {{ channel.purpose}}
+      </div>
+    </div>
   </div>
+  <div class="chat-options">
+    <a href="#">
+      <i class="fas fa-info-circle"></i>
+    </a>
+    <a href="#">
+      <i class="fa-cog fas"></i>
+    </a>
+  </div>
+</div>
 
-  <div *ngFor="let su of messageSpecific">
-    From :- {{su.name}}
+<div class="chat-history" id="messageBox">
+  <ul style="padding:0">
+    <div *ngIf="noMore">
+      <button class="btn btn-outline-secondary" (click)="loadMessages();">Load More</button>
+    </div>
+    <div *ngIf="!noMore">
+      This is the beginning of the conversation.
+    </div>
     <br>
-    {{su.msg}}
+    <li class="clearfix" *ngFor="let message of messages">
+
+      <div class="message-data" id="message-{{message.id}}">
+        <div class="">
+          <div class="profile-pic-div float-left">
+
+            <img src=" {{urlBase + message.profile.dp_url_small}}" alt="PP" onerror="this.src='../app/image/user.png'"
+              class="user-pic-small">
+          </div>
+          <div class="message-div float-left">
+            <span class="message-data-name">{{message.profile.full_name}}</span>
+            <span class="message-data-name" ng-hide=(message.profile.full_name)>{{message.sender_name}}</span>
+            <span class="message-data-time small">
+              {{message.created_at | date: 'short'}}
+            </span>
+            <p>{{message.body}}</p>
+            <div class="message-attachment" *ngFor="let attachment of message.message_attachments">
+              <div class="attachment-name">
+                <span>
+                  <a class="" href="{{urlBase + attachment.attachment_url}}"
+                    download="{{attachment.attachment_file_name}}">
+                    <i class="fas fa-download"></i>
+                  </a>
+                </span>
+                <span>{{attachment.attachment_file_name}}</span>
+              </div>
+
+              <img src="{{attachment.attachment_url}}" alt="">
+            </div>
+          </div>
+          <div class="read-div float-left">
+            <i class="fas fa-check-double ticks" style="color:blue"
+              *ngIf="message.readBy.length === channel.channel_profiles.length"></i>
+            <i class="fas fa-check ticks" *ngIf="message.receivedBy.length === channel.channel_profiles.length"
+              style="color:green"></i>
+            <i class="fas fa-check ticks"
+              *ngIf="(message.readBy.length !== channel.channel_profiles.length) && (message.receivedBy.length !== channel.channel_profiles.length)"
+              style="color:red"></i>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+</div> <!-- end chat-history -->
+
+<div class="chat-message clearfix fixed-bottom">
+  <form name="myform">
+    <div class="form-group" style="width:100%; float: left;">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <div class="btn-group dropup">
+            <button class="btn btn-outline-secondary shadow-none" type="button" id="button-addon1"
+              data-toggle="dropdown">
+              <i class="fa fa-plus"></i>
+            </button>
+            <div class="dropdown-menu share-dropdown">
+              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#shareModal', true);">
+                Share File from PC
+              </div>
+              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#snippetModal', true);">
+                Share Code Snippet
+              </div>
+              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#dmSearchModal', true)">
+                Share File via Drive
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui-mention-container">
+          <input type="text" class="form-control shadow-none" placeholder="" aria-label="send-message"
+            aria-describedby="button-addon1" [(ngModel)]="newMsg" [ngModelOptions]="{standalone: true}" autofocus ui-mention my-mention ng-trim="false"
+            ng-keypress="($event.which === 13)?sendMessage():0" smart-area="areaConfig">
+          <div class="ui-mention-highlight"></div>
+          <ul class="dropdown mention-dropdown" *ngIf="mention.length">
+            <!-- <li *ngFor="let choice of mention.choices" [ngClass]="{active:mention.activeChoice==choice}"
+              (click)="select(choice)">
+              <a href="#">{{::choice.full_name}}</a>
+            </li> -->
+          </ul>
+        </div>
+        <div class="input-group-append" id="button-addon4">
+          <button class="btn btn-outline-secondary shadow-none" type="button">
+            <i class="fas fa-at"></i>
+          </button>
+          <button class="btn btn-outline-secondary shadow-none" type="button">
+            <i class="fas far fa-smile"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+    <!-- <button class="btn btn-outline-secondary form-control" type="submit" (click)="sendMessage();" style="width:9%"
+      style="float: left" ng-disabled="myform.$invalid">
+      <i class="fas fa-long-arrow-alt-right"></i>
+    </button> -->
+  </form>
+
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="shareModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload File from PC</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <button class="btn-secondary btn btn-block" multiple="true" (input)="uploadFiles($files)">
+              Select files
+            </button>
+          </div>
+          <div class="form-group">
+            <input type="text" name="comment" id="comment" class="form-control" placeholder="Your comments here.."
+              [(ngModel)]="fileComment" [ngModelOptions]="{standalone: true}">
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  <!-- <br>
-          <button type="button" (click)="sendMessage()">Send Message</button> -->
-  <br>
-  <br>
-  <p>Send message</p>
-  <p *ngIf="typingStatus">Typing..</p>
-  <input type="text" [(ngModel)]="message" (keyup)="typingMsg()">
-  <button type="button" (click)="sendMsgToSpecific()">SendMsgToSpecific</button>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="dmSearchModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Directly Message People
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="enter your search text here...">
+        <br>
+        <div class="people-list">
+          <div class="people-list-item" *ngFor="let item of list"="user in filteredUsers | filter: searchText"
+            (click)="transitionToDM(user)">
+            <span>{{user.full_name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="allSearchModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Search People
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="enter your search text here...">
+        <br>
+        <div class="people-list">
+          <div class="people-list-item" *ngFor="let item of list"="channel in channels | filter: searchText"
+            (click)="transitionToChannel(channel)">
+            <span>#{{channel.name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="snippetModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Share Code Snippets</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="code-snippet">
+        </div>
+        <span>{{snippet}}</span>
+        <div class="form-group" style="display:flex; justify-content: space-between">
+          <button type="submit" (click)="sendSnippet()" class="btn btn-outline-primary w-50">
+            Send Snippet
+          </button>
+          <button type="button" (click)="toggleModal('#snippetModal', false)"
+            class="btn w-50 btn-outline-danger">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

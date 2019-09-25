@@ -1,5 +1,6 @@
-import { Component, OnInit , ElementRef , ViewChild} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ChatService } from 'src/app/service/chat.service';
+declare var w3channel: any;
 
 @Component({
   selector: 'app-chat-room',
@@ -8,82 +9,213 @@ import { ChatService } from 'src/app/service/chat.service';
 })
 export class ChatRoomComponent implements OnInit {
 
-  @ViewChild('scrollMe') private elementRef: ElementRef;
+  @ViewChild('scrollMe', { static: false }) private elementRef: ElementRef;
 
   title = 'simmpli-electron';
-  userList: any = [];
-  messageSpecific: any = [];
-  selectedUser = 'deepak';
-  message = '';
-  username: any = '';
-  channel: any = { 'rooms': 'w3channel' };
-  typingStatus: boolean = false;
+  noMore = true;
+  urlBase = localStorage.getItem("urlBase");
+  channelId: any;
+  channel: any = [];
+  currentChannel = this.channel;
+  messages = '';
+  newMsg = "";
+  fileComment = "";
+  mentions = [];
+  mention = [];
+
+  currentUser = JSON.parse(localStorage.getItem("user"));
+  areaConfig = {
+    autocomplete: [{
+      words: [/@([A-Za-z]+[_A-Za-z0-9]+)/gi],
+      cssClass: 'user'
+    }],
+    dropdown: [{
+      trigger: /@([A-Za-z]+[_A-Za-z0-9]+)/gi,
+      list: function (match, callback) {
+        //you can search api..
+      },
+      onSelect: function (item) {
+        // user.push(item);
+        return item.display;
+      },
+      mode: 'replace'
+    }]
+  };
+
+  userId: any;
 
   constructor(private chatService: ChatService) {
+
+    w3channel.bindEvent(`new-message-${this.userId}`, (message) => {
+
+    });
+
+    w3channel.bindEvent(`new-channel-${this.userId}`, (data) => {
+      console.log('new channel created: ', data.message);
+      if (data.channel.channel_type === "public") {
+        console.log('new channel logged in');
+      }
+
+    });
+
+    w3channel.bindEvent('new-user', (userDetails) => {
+      console.log('new user logged in');
+    })
 
   }
 
   ngOnInit() {
-    this.chatService.getMessage()
-      .subscribe((msg: string) => {
-        this.message = msg;
-      });
-
-    this.chatService.getUserList()
-      .subscribe((userList: any) => {
-        this.userList = userList;
-      });
-
-    this.chatService.getMsgToSpecific()
-      .subscribe((msg: string) => {
-        this.messageSpecific.push(msg);
-        this.typingStatus = false;
-      });
-
-    this.chatService.getChannelMsg(this.channel)
-      .subscribe((msg: string) => {
-        alert(msg);
-      });
-
-    this.chatService.typingUser()
-      .subscribe((msg: string) => {
-        this.typingStatus = true;
-        setTimeout(() => {
-          this.typingStatus = false;
-        }, 2000);
-      });
-
+    this.loadMessages();
   }
 
-  sendMessage() {
-    this.chatService.sendMessage();
-  }
+  // const flask = new CodeFlask('.code-snippet', {
+  //   language: 'js',
+  //   lineNumbers: true
+  // });
+  // // console.log(flask);
 
-  connectUser() {
-    this.chatService.connectUser(this.username);
-  }
+  // tickColor = {
+  //   color: "red"
+  // };
+  pageNo = 2;
 
-  connectChannel() {
-    this.chatService.connectChannel(this.channel);
-  }
 
-  sendMsgToSpecific() {
-    var msg = this.chatService.sendMsgToSpecific(this.selectedUser, this.message, this.username);
-    this.message = '';
-    this.typingStatus = false;
-    console.log('msg', msg);
-  }
 
-  selecteUser(id) {
-    this.selectedUser = id;
+
+  loadMessages = () => {
+    // ChannelService.getMessages(channelId, pageNo, function (err, newmessages) {
+    //   if (newmessages) {
+    //     if (newmessages.length < 20) {
+    //       noMore = false;
+    //     }
+    //     messages = messages.concat(newmessages);
+    //     pageNo++;
+    //     messages.forEach((message) => {
+    //       message.readBy = [];
+    //       message.receivedBy = [];
+    //       message.message_profile_statuses.forEach((profile_status) => {
+    //         if (profile_status.status === "read")
+    //           message.readBy.push(profile_status);
+    //         if (profile_status.status === "received")
+    //           message.receivedBy.push(profile_status);
+    //       });
+    //     })
+    //   } else {
+    //     console.log('error getting new messages');
+    //   }
+    // });
   }
 
 
-  typingMsg() {
-    setTimeout(() => {
-      this.chatService.typingMsg(this.selectedUser);
-    }, 2000);
+
+  sendSnippet = () => {
+    // console.log('inside snippet: ', flask.getCode());
   }
+
+  uploadFiles = (files) => {
+    // ChannelService.sendFile(channel, fileComment, files, function (err, res) {
+    //   if (err) {
+    //     console.log('error uploading file : ', err);
+    //   } else {
+    //     console.log('file uploaded');
+    //   }
+    // });
+    // fileComment = "";
+    // $('#shareModal').modal('hide');
+  }
+
+  // mousetrap.bind(['command+t', 'ctrl+t'], function() {
+  //   console.log('shortcut pressed');
+  //   $('#dmSearchModal').modal('show');
+  // })
+
+  // mousetrap.bind(['command+k', 'ctrl+k'], function() {
+  //   console.log('shortcut pressed');
+  //   $('#allSearchModal').modal('show');
+  // })
+
+  // scrollToBottom = () => {
+  //   let obj = document.getElementById("messageBox");
+  //   if (obj) {
+  //     obj.scrollTop = (obj.scrollHeight * 2);
+  //   }
+  // };
+
+  checkScroll = () => {
+    let list = document.querySelector('.chat-history ul');
+    // if (list.scrollHeight < 0.9 * window.innerHeight) {
+    //   console.log('inside if');
+    //   $(".chat-history ul").css(
+    //     'position', 'absolute'
+    //   );
+    //   $(".chat-history ul").css(
+    //     'margin-left', '20px'
+    //   );
+    // } else {
+    //   $(".chat-history ul").css(
+    //     'position', 'static'
+    //   );
+    //   $(".chat-history ul").css(
+    //     'margin-left', '0'
+    //   );
+    // }
+  }
+
+  // angular.element(document).ready(function() {
+  //   checkScroll();
+  //   scrollToBottom();
+  // });
+
+  sendMessage = () => {
+    // console.log(mentions);
+    // mentions = mentions.filter((mention) => {
+    //   return newMsg.includes(`@${mention.full_name}`)
+    // });
+    // console.log(mentions);
+    // if (!newMsg) {
+    //   return;
+    // }
+    // mentions = mentions.map((mention) => {
+    //   return {
+    //     profile_id: mention.profile_id
+    //   }
+    // });
+    // ChannelService.sendMessage(channel, newMsg, mentions, function (err, res) {
+    //   if (err) {
+    //     console.log("some error in sedning messages");
+    //   } else {
+    //     loadMessages();
+    //     console.log("received");
+    //   }
+    // });
+    // newMsg = "";
+    // mentions = [];
+  };
+
+  // $scope.$on('addMention', (e, data) => {
+  //   const mentionProfileId = {
+  //     profile_id: data.id,
+  //     full_name: data.full_name
+  //   };
+  //   let match = $filter('filter')(mentions, {
+  //     profile_id: data.id,
+  //     full_name: data.full_name
+  //   });
+  //   if (match.length <= 0)
+  //     mentions.push(mentionProfileId);
+  // });
+
+  // $scope.$on(`new-message-${channelId}`, (e, message) => {
+  //   console.log("message received: ", message);
+  //   messages.push(message);
+  //   $scope.$apply(messages);
+  //   checkScroll();
+  //   scrollToBottom();
+
+  // });
+
+
+
 
   scrollToBottom(): void {
     try {

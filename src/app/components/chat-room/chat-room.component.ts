@@ -55,7 +55,7 @@ export class ChatRoomComponent implements OnInit {
 
     this.commonService.getChatData.subscribe((channelId: any) => {
       if (channelId) {
-        this.channelId = channelId;
+        this.channelId = 4;
         this.getUserChats(channelId);
       }
     });

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { CommonService } from './service/common.service';
 import { ApiService } from './service/api.service';
-import { async } from '@angular/core/testing';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   mentionSearch = "";
   selectedId = 0;
   channels = [];
-  user: any = JSON.parse(localStorage.getItem("user"));
+  user: any;
   urlBase = localStorage.getItem("urlBase");
   currentChannel: any;
   filteredUsers: any;
@@ -35,6 +35,9 @@ export class AppComponent implements OnInit {
     this.commonService.loggedIn.subscribe((val: boolean) => {
       this.isLoggedIn = val;
       if (this.isLoggedIn) {
+        this.user = JSON.parse(localStorage.getItem("user"));
+
+        this.getChannels();
         this.getUsers();
       } else {
         this.route.navigate(['/login']);
@@ -49,6 +52,15 @@ export class AppComponent implements OnInit {
     this.route.navigate(['/login']);
   }
 
+  getChannels() {
+    this.api.getChannels().subscribe((response) => {
+      if (response.success) {
+        this.publicChannels = response.channels;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
 
   getUsers() {
     this.api.getUsers().subscribe(async (response) => {
@@ -182,7 +194,8 @@ export class AppComponent implements OnInit {
 
 
   transitionToDM(anotherUser) {
-    // selectedId = anotherUser.id;
+    this.selectedId = anotherUser.id;
+    this.commonService.getChatDataResponse(anotherUser.id);
     // $("#dmSearchModal").modal('hide');
     // EventService.busy(true);
     // var existingChannel = null;

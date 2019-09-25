@@ -40,17 +40,7 @@ export class ApiService {
   }
 
   getChannels = () => {
-
-    this.http.get(this.baseUrl + "/chat/channels", { headers: this.getHeader() }).map(res => res.json());
-    // .then((res) => {
-    //   callback(undefined, res.data.channels);
-    // })
-    // .catch(err => {
-    //   console.log("====================================");
-    //   console.log(`error: ${JSON.stringify(err)}`);
-    //   console.log("====================================");
-    //   callback(err, undefined);
-    // });
+    return this.http.get(this.baseUrl + "/chat/channels", { headers: this.getHeader() }).map(res => res.json());
   }
 
   sendFile = (channel, message, files, callback) => {
@@ -90,49 +80,25 @@ export class ApiService {
   }
 
   getUsers() {
-
     return this.http.get(`${this.baseUrl}/chat/channels/profiles`, { headers: this.getHeader() }).map(res => res.json());
-    //   callback(undefined, res.data.profiles);
-    // })
-    //   .catch(err => {
-    //     console.log('====================================');
-    //     console.log(JSON.stringify(err));
-    //     console.log('====================================');
-    //     callback(err, undefined);
-    //   })
   }
 
-  getMessages = (channelId, pageNo = 1, callback) => {
-
-    this.http.get(`${this.baseUrl}/chat/channels/${channelId}/messages?page=${pageNo}`, { headers: this.getHeader() }).map(res => res.json());
-    //   callback(undefined, res.data.messages);
-    // })
-    //   .catch(err => {
-    //     console.log('====================================');
-    //     console.log(JSON.stringify(err));
-    //     console.log('====================================');
-    //     callback(err, undefined);
-    //   });
+  getMessages(channelId, pageNo) {
+    return this.http.get(`${this.baseUrl}/chat/channels/${channelId}/messages?page=${pageNo}`, { headers: this.getHeader() }).map(res => res.json());
   }
 
   markAsReceived = (channelId, messageId, callback) => {
+    return this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/${messageId}/mark_as_received`, {}, { headers: this.getHeader() }).map(res => res.json());
 
-    this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/${messageId}/mark_as_received`, {}, { headers: this.getHeader() }).map(res => res.json());
-    //   console.log('marked as received');
-    //   callback(res);
-    // })
   }
 
   markAsRead = (channelId, callback) => {
-    this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/mark_as_read`, {}, { headers: this.getHeader() }).map(res => res.json());
-    //   console.log('marked as read');
-    //   callback(res);
-    // })
+    return this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/mark_as_read`, {}, { headers: this.getHeader() }).map(res => res.json());
   }
 
   createChannel = (channel, callback) => {
 
-    this.http.post(`${this.baseUrl}/chat/channelsthis.`, { channel: channel }, this.headers()).map(res => res.json());
+    return this.http.post(`${this.baseUrl}/chat/channelsthis.`, { channel: channel }, this.headers()).map(res => res.json());
     //   console.log(res);
     //   res.data.channel.channel_profiles.forEach(profile => {
     //     console.log(`pushing on: new-message-${profile.profile_id}`)
@@ -151,7 +117,7 @@ export class ApiService {
 
   sendMessage = (channel, message, mentions, callback) => {
 
-    this.http.post(`${this.baseUrl}/chat/channels/${channel.id}/messagesthis.`, { message: { body: message, message_profiles_attributes: mentions } }, { headers: this.getHeader() }).map(res => res.json());
+    return this.http.post(`${this.baseUrl}/chat/channels/${channel.id}/messagesthis.`, { message: { body: message, message_profiles_attributes: mentions } }, { headers: this.getHeader() }).map(res => res.json());
     //   console.log(res.data.message)
     //   channel.channel_profiles.forEach(profile => {
     //     console.log(`pushing on: new-message-${profile.profile_id}`)

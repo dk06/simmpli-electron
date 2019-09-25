@@ -3,7 +3,7 @@
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
         <div class="sidebar-brand fixed-top">
-          <a href="#">Simmpli Chat</a>
+          <a href="javascript:void(0)">Simmpli Chat</a>
         </div>
         <div class="sidebar-header">
 
@@ -14,14 +14,14 @@
           <div class="user-info">
             <span class="user-name"><b> {{user.current_profile.full_name}} </b>
             </span>
-            <span class="user-status" ng-if="user.online">
+            <!-- <span class="user-status" ng-if="user.online">
               <i class="fa fa-circle"></i>
               <span>Online</span>
             </span>
             <span class="user-status" ng-if="!user.online">
               <i class="fa fa-circle" style="color: red"></i>
               <span>Offline</span>
-            </span>
+            </span> -->
           </div>
         </div>
         <div class="sidebar-menu">
@@ -31,7 +31,7 @@
               <i class="fa fa-plus" ui-sref="dashboard.new-channel"></i>
             </li>
             <li *ngFor="let channel of publicChannels">
-              <a href="#" (click)="transitionToChannel(channel);"
+              <a href="javascript:void(0)" (click)="transitionToChannel(channel);"
                 [ngStyle]="(channel.id == selectedId)? activeStyle: {}">
                 <span class="ml-3"># {{channel.name}}</span>
               </a>
@@ -42,16 +42,17 @@
               <i class="fa fa-plus" (click)="toggleModal('#dmSearchModal',true)"></i>
             </li>
             <li>
-              <a href="#" (click)="transitionToDM(user.current_profile);"
+              <a href="javascript:void(0)" (click)="transitionToDM(user.current_profile);"
                 [ngStyle]="((user.current_profile.id == selectedId))? activeStyle: {}">
                 <span>
-                  <i class="fa fa-circle custom-online" style="color:green"></i>
+                  <!-- <i class="fa fa-circle custom-online" style="color:green"></i> -->
                   <span>{{user.current_profile.full_name}} (you)</span>
                 </span>
               </a>
             </li>
             <li *ngFor="let user of filteredUsers">
-              <a href="#" (click)="transitionToDM(user);" [ngStyle]="((user.id == selectedId))? activeStyle: {}">
+              <a href="javascript:void(0)" (click)="transitionToDM(user);"
+                [ngStyle]="((user.id == selectedId))? activeStyle: {}">
                 <span>
                   <i class="fa fa-circle custom-online" ng-if="!user.online"></i>
                   <i class="fa fa-circle custom-online" ng-if="user.online" style="color:green"></i>
@@ -63,7 +64,7 @@
             <!-- <hr style="height:1px; border:none; color:rgb(90, 81, 81); background-color:rgb(82, 76, 76); width:100%; text-align:left; margin: 0 auto 0 0;"> -->
           </ul>
           <div class="fixed-bottom bottom-menu">
-            <a href="javascript:void(0)" (click)="logOut();" class="header-menu">
+            <a href="javascript:void(0)avascript:void(0)" (click)="logOut();" class="header-menu">
               <span class="fas fa-power-off" style="padding-right: 5px"></span>
               <span style="padding: 0">
                 Logout

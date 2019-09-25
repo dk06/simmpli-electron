@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ChatService } from 'src/app/service/chat.service';
+import { CommonService } from 'src/app/service/common.service';
+import { ApiService } from 'src/app/service/api.service';
 declare var w3channel: any;
 
 @Component({
@@ -16,7 +18,8 @@ export class ChatRoomComponent implements OnInit {
   urlBase = localStorage.getItem("urlBase");
   channelId: any;
   channel: any = [];
-  currentChannel = this.channel;
+  currentChannel: any;
+  publicChannels: any;
   messages = '';
   newMsg = "";
   fileComment = "";
@@ -44,8 +47,17 @@ export class ChatRoomComponent implements OnInit {
 
   userId: any;
 
-  constructor(private chatService: ChatService) {
+  constructor(
+    private chatService: ChatService,
+    private commonService: CommonService,
+    private api: ApiService
+  ) {
 
+    this.commonService.getChatData.subscribe((channelId: any) => {
+      if (channelId) {
+        this.getUserChats(channelId);
+      }
+    });
     w3channel.bindEvent(`new-message-${this.userId}`, (message) => {
 
     });
@@ -68,6 +80,50 @@ export class ChatRoomComponent implements OnInit {
     this.loadMessages();
   }
 
+  getCurrentChannel() {
+    this.currentChannel = localStorage.getItem('last_active_channel');
+    if (this.publicChannels.length > 0 && !this.currentChannel) {
+      this.currentChannel = this.publicChannels[0];
+    } else {
+      if (this.currentChannel) {
+        this.currentChannel = JSON.parse(this.currentChannel);
+        if (this.currentChannel.channel_type === 'private') {
+          // this.currentChannelDM = this.currentChannel;
+        } else {
+          // this.currentChannelDM = null;
+        }
+      } else {
+        // this.currentChannelDM = null;
+      }
+    }
+  }
+  getUserChats(channelId) {
+
+    this.api.getMessages(channelId, this.pageNo).subscribe((response) => {
+      if (response.success) {
+        if (response.length < 20) {
+          this.noMore = false;
+        }
+        // this.messages = this.messages.concat(newmessages);
+        this.pageNo++;
+        // this.messages.forEach((message) => {
+        //   message.readBy = [];
+        //   message.receivedBy = [];
+        //   message.message_profile_statuses.forEach((profile_status) => {
+        //     if (profile_status.status === "read")
+        //       message.readBy.push(profile_status);
+        //     if (profile_status.status === "received")
+        //       message.receivedBy.push(profile_status);
+        //   });
+        // })
+      } else {
+        console.log('error getting new messages');
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+
   // const flask = new CodeFlask('.code-snippet', {
   //   language: 'js',
   //   lineNumbers: true
@@ -77,7 +133,7 @@ export class ChatRoomComponent implements OnInit {
   // tickColor = {
   //   color: "red"
   // };
-  pageNo = 2;
+  pageNo = 1;
 
 
 

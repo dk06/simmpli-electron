@@ -12,6 +12,8 @@ import "rxjs/add/observable/throw";
 export class CommonService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public getChatData: BehaviorSubject<any> = new BehaviorSubject<any>(0);
+
 
   constructor(private http: Http) {
     console.log("connected Login");
@@ -19,6 +21,10 @@ export class CommonService {
 
   setCurrentUser() {
     this.loggedIn.next(true);
+  }
+
+  getChatDataResponse(channelId) {
+    this.getChatData.next(channelId);
   }
 
   logout() {

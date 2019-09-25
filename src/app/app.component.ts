@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonService } from './service/common.service';
 import { ApiService } from './service/api.service';
 import $ from 'jquery';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-root',
@@ -53,9 +54,17 @@ export class AppComponent implements OnInit {
   }
 
   getChannels() {
-    this.api.getChannels().subscribe((response) => {
+    this.api.getChannels().subscribe(async (response) => {
       if (response.success) {
-        this.publicChannels = response.channels;
+        var filter = [];
+        await response.channels.map((channel) => {
+          if (channel.name.split(',')[1]) {
+            channel.name = channel.name.split(',')[1];
+          }
+          filter.push(channel);
+        });
+
+        this.publicChannels = await filter;
       }
     }, error => {
       console.log('error', error);
@@ -161,8 +170,10 @@ export class AppComponent implements OnInit {
     // }
   }
 
-  transitionToChannel() {
+  transitionToChannel(anotherUser) {
     console.log('00')
+    this.selectedId = anotherUser.id;
+    this.commonService.getChatDataResponse(anotherUser.id);
     // $("#allSearchModal").modal('hide');
 
     // if (channel) {

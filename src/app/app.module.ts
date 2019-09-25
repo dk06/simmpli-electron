@@ -9,6 +9,7 @@ import { CommonService } from './service/common.service';
 import { ChatService } from './service/chat.service';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { LoginComponent } from './components/login/login.component';
+import { ApiService } from './service/api.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { LoginComponent } from './components/login/login.component';
     ReactiveFormsModule,
     HttpModule
   ],
-  providers: [CommonService, ChatService],
+  providers: [CommonService, ChatService, ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

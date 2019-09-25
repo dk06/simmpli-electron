@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   user: any;
   urlBase = localStorage.getItem("urlBase");
   currentChannel: any;
+  filteredUsers: any;
+  publicChannels: any;
 
   constructor(private commonService: CommonService, private route: Router) {
 

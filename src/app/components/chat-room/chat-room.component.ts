@@ -55,6 +55,7 @@ export class ChatRoomComponent implements OnInit {
 
     this.commonService.getChatData.subscribe((channelId: any) => {
       if (channelId) {
+        this.channelId = channelId;
         this.getUserChats(channelId);
       }
     });
@@ -223,30 +224,33 @@ export class ChatRoomComponent implements OnInit {
   // });
 
   sendMessage = () => {
-    // console.log(mentions);
-    // mentions = mentions.filter((mention) => {
-    //   return newMsg.includes(`@${mention.full_name}`)
-    // });
-    // console.log(mentions);
-    // if (!newMsg) {
-    //   return;
-    // }
-    // mentions = mentions.map((mention) => {
-    //   return {
-    //     profile_id: mention.profile_id
-    //   }
-    // });
-    // ChannelService.sendMessage(channel, newMsg, mentions, function (err, res) {
-    //   if (err) {
-    //     console.log("some error in sedning messages");
-    //   } else {
-    //     loadMessages();
-    //     console.log("received");
-    //   }
-    // });
-    // newMsg = "";
-    // mentions = [];
+    console.log(this.mentions);
+    this.mentions = this.mentions.filter((mention) => {
+      return this.newMsg.includes(`@${mention.full_name}`)
+    });
+    console.log(this.mentions);
+    if (!this.newMsg) {
+      return;
+    }
+    this.mentions = this.mentions.map((mention) => {
+      return {
+        profile_id: mention.profile_id
+      }
+    });
+    this.api.sendMessage(this.channelId, this.newMsg, this.mentions).subscribe((response) => {
+      if (response.success) {
+        console.log("received");
+      } else {
+        console.log("some error in sedning messages");
+      }
+    });
+    this.newMsg = "";
+    this.mentions = [];
   };
+
+  toggleModal(){
+
+  }
 
   // $scope.$on('addMention', (e, data) => {
   //   const mentionProfileId = {

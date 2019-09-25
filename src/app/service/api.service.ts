@@ -115,9 +115,9 @@ export class ApiService {
     // });
   }
 
-  sendMessage = (channel, message, mentions, callback) => {
+  sendMessage = (channelId, message, mentions) => {
 
-    return this.http.post(`${this.baseUrl}/chat/channels/${channel.id}/messagesthis.`, { message: { body: message, message_profiles_attributes: mentions } }, { headers: this.getHeader() }).map(res => res.json());
+    return this.http.post(`${this.baseUrl}/chat/channels/${channelId}/messages`, { message: { body: message, message_profiles_attributes: mentions } }, { headers: this.getHeader() }).map(res => res.json());
     //   console.log(res.data.message)
     //   channel.channel_profiles.forEach(profile => {
     //     console.log(`pushing on: new-message-${profile.profile_id}`)

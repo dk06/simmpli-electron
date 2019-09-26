@@ -165,12 +165,20 @@ export class AppComponent implements OnInit {
 
   transitionToDM(anotherUser) {
     this.commonService.selectUser(anotherUser.id);
-    let findChannel = this.actualChannels.find(i => i.channel_type == "private" && i.channel_profiles[0].profile_id == anotherUser.id);
+    const channel = this.actualChannels.find((channel) => {
+      if (channel.channel_profiles.length == 2) {
+        if (channel.channel_type == "private" && channel.channel_profiles[0].profile_id == anotherUser.id || channel.channel_profiles[1].profile_id == anotherUser.id) {
+          return channel;
+        }
+      } else {
+        if (channel.channel_type == "private" && channel.channel_profiles.length == 1 && channel.channel_profiles[0].profile_id == anotherUser.id) {
+          return channel;
+        }
+      }
+    });
 
-    if (findChannel) {
-      localStorage.setItem('last_active_channel', JSON.stringify(findChannel));
-      this.commonService.callChatData(findChannel.id);
-    }
+    localStorage.setItem('last_active_channel', JSON.stringify(channel));
+    this.commonService.callChatData(channel.id);
   }
 
 }

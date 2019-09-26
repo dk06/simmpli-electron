@@ -1,16 +1,16 @@
 <div class="chat-header clearfix fixed-top">
   <div class="chat-about">
-    <div class="chat-with" *ngIf="channel.name">{{channel.name.split(', ')[1]}}</div>
-    <div class="chat-with" *ngIf="!channel.name"># {{channel.name}}</div>
+    <div class="chat-with" *ngIf="currentChannel.name.split(',')[1]">{{currentChannel.name.split(', ')[1]}}</div>
+    <div class="chat-with" *ngIf="!currentChannel.name.split(',')[1]"># {{currentChannel.name}}</div>
     <div class="chat-details">
-      <div *ngIf="!channel.name">
-        <!-- <i class="fas fa-user"></i> <a href="#" title="View member list">{{channel.channel_profiles.length}}</a> | -->
+      <div *ngIf="!currentChannel.name.split(',')[1]">
+        <i class="fas fa-user"></i> <a href="#" title="View member list">{{currentChannel.currentChannel_profiles.length}}</a> |
         <i class="fas fa-thumbtack"></i> 0 | <a><i class="fas fa-pen"></i></a>
       </div>
-      <div *ngIf="channel.name">
-        <i class="fa fa-circle custom-online" *ngIf="!user.online"></i>
-        <i class="fa fa-circle custom-online" *ngIf="user.online" style="color:green"></i>
-        | {{ channel.purpose}}
+      <div *ngIf="currentChannel.name.split(',')[1]">
+        <!-- <i class="fa fa-circle custom-online" *ngIf="!user.online"></i>
+        <i class="fa fa-circle custom-online" *ngIf="user.online" style="color:green"></i> -->
+        | {{ currentChannel.purpose}}
       </div>
     </div>
   </div>
@@ -26,10 +26,10 @@
 
 <div class="chat-history" id="messageBox">
   <ul style="padding:0">
-    <div *ngIf="noMore">
-      <button class="btn btn-outline-secondary" (click)="loadMessages();">Load More</button>
+    <div *ngIf="noMore" class="text-center">
+      <button class="btn btn-outline-secondary" (click)="loadMoreMessages();">Load More</button>
     </div>
-    <div *ngIf="!noMore">
+    <div *ngIf="!noMore" class="text-center">
       This is the beginning of the conversation.
     </div>
     <br>
@@ -38,8 +38,7 @@
       <div class="message-data" id="message-{{message.id}}">
         <div class="">
           <div class="profile-pic-div float-left">
-
-            <img src=" {{urlBase + message.profile.dp_url_small}}" alt="PP" onerror="this.src='../app/image/user.png'"
+            <img src="{{urlBase + message.profile.dp_url_small}}" alt="PP" onError="this.src='./assets/image/user.png'"
               class="user-pic-small">
           </div>
           <div class="message-div float-left">
@@ -64,13 +63,13 @@
             </div>
           </div>
           <div class="read-div float-left">
-            <i class="fas fa-check-double ticks" style="color:blue"
+            <!-- <i class="fas fa-check-double ticks" style="color:blue"
               *ngIf="message.readBy.length === channel.channel_profiles.length"></i>
             <i class="fas fa-check ticks" *ngIf="message.receivedBy.length === channel.channel_profiles.length"
               style="color:green"></i>
             <i class="fas fa-check ticks"
               *ngIf="(message.readBy.length !== channel.channel_profiles.length) && (message.receivedBy.length !== channel.channel_profiles.length)"
-              style="color:red"></i>
+              style="color:red"></i> -->
           </div>
         </div>
       </div>

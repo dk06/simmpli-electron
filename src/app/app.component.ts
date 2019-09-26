@@ -79,6 +79,8 @@ export class AppComponent implements OnInit {
         });
 
         this.publicChannels = await filter;
+        // this.currentChannelFind();
+
       }
     }, error => {
       console.log('error', error);
@@ -218,14 +220,23 @@ export class AppComponent implements OnInit {
   //   }
 
 
+  currentChannelFind() {
+    var currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
+    if (currentChannel) {
+      this.transitionToDM(currentChannel.profile_id);
+    }
+
+  }
+
   transitionToDM(anotherUser) {
     this.selectedId = anotherUser.id;
     let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
 
     if (findChannel) {
+      localStorage.setItem('last_active_channel', JSON.stringify(findChannel));
       this.commonService.getChatDataResponse(findChannel.id);
     } else if (!findChannel) {
-      let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
+      let findChannel = this.actualChannels.find(i => i.channel_profiles[1].profile_id == anotherUser.id);
       this.commonService.getChatDataResponse(findChannel.id);
     }
 

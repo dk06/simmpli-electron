@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable ,EventEmitter } from '@angular/core';
 import { Http, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs';
@@ -12,7 +12,7 @@ import "rxjs/add/observable/throw";
 export class CommonService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public getChatData: BehaviorSubject<any> = new BehaviorSubject<any>(0);
+  public getChatData: EventEmitter<number> = new EventEmitter<number>();
 
 
   constructor(private http: Http) {
@@ -24,7 +24,7 @@ export class CommonService {
   }
 
   getChatDataResponse(channelId) {
-    this.getChatData.next(channelId);
+    this.getChatData.emit(channelId);
   }
 
   logout() {

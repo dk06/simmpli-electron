@@ -16,15 +16,17 @@ export class ChatRoomComponent implements OnInit {
   title = 'simmpli-electron';
   noMore = true;
   urlBase = localStorage.getItem("urlBase");
-  channelId: any;
+  channelId: number = 0;
   channel: any = [];
   currentChannel: any;
   publicChannels: any;
-  messages = '';
+  messages: any;
   newMsg = "";
   fileComment = "";
   mentions = [];
   mention = [];
+  pageNo = 1;
+
 
   currentUser = JSON.parse(localStorage.getItem("user"));
   areaConfig = {
@@ -54,16 +56,20 @@ export class ChatRoomComponent implements OnInit {
   ) {
 
     this.commonService.getChatData.subscribe((channelId: any) => {
+      this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
+
       if (channelId) {
+        this.pageNo = 1;
+
         this.channelId = channelId;
         this.getUserChats(channelId);
       }
     });
-    w3channel.bindEvent(`new-message-${this.userId}`, (message) => {
+    w3channel.bindEvent(`new-message-${this.channelId}`, (message) => {
 
     });
 
-    w3channel.bindEvent(`new-channel-${this.userId}`, (data) => {
+    w3channel.bindEvent(`new-channel-${this.channelId}`, (data) => {
       console.log('new channel created: ', data.message);
       if (data.channel.channel_type === "public") {
         console.log('new channel logged in');
@@ -82,7 +88,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   getCurrentChannel() {
-    this.currentChannel = localStorage.getItem('last_active_channel');
+    this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
     if (this.publicChannels.length > 0 && !this.currentChannel) {
       this.currentChannel = this.publicChannels[0];
     } else {
@@ -102,11 +108,13 @@ export class ChatRoomComponent implements OnInit {
 
     this.api.getMessages(channelId, this.pageNo).subscribe((response) => {
       if (response.success) {
+        this.noMore = false;
         if (response.messages.length < 20) {
           this.noMore = false;
         }
 
         this.messages = response.messages;
+        this.scrollToBottom();
         // this.messages = this.messages.concat(response.messages);
         this.pageNo++;
         // this.messages.forEach((message) => {
@@ -127,6 +135,11 @@ export class ChatRoomComponent implements OnInit {
     });
   }
 
+
+  loadMoreMessages() {
+    this.pageNo++;
+    this.getUserChats(this.channelId);
+  }
   // const flask = new CodeFlask('.code-snippet', {
   //   language: 'js',
   //   lineNumbers: true
@@ -136,7 +149,6 @@ export class ChatRoomComponent implements OnInit {
   // tickColor = {
   //   color: "red"
   // };
-  pageNo = 1;
 
 
 
@@ -280,9 +292,12 @@ export class ChatRoomComponent implements OnInit {
 
 
   scrollToBottom(): void {
-    try {
-      this.elementRef.nativeElement.scrollTop = this.elementRef.nativeElement.scrollHeight;
-    } catch (err) { }
+    setTimeout(() => {
+      let obj = document.getElementById("messageBox");
+      if (obj) {
+        obj.scrollTop = (obj.scrollHeight * 2);
+      }
+    }, 300);
   }
 
 }

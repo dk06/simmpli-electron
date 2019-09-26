@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   currentChannel: any;
   filteredUsers: any;
   publicChannels: any;
+  actualChannels: any;
 
   constructor(
     private commonService: CommonService,
@@ -67,6 +68,7 @@ export class AppComponent implements OnInit {
     this.api.getChannels().subscribe(async (response) => {
       if (response.success) {
         var filter = [];
+        this.actualChannels = response.channels;
         await response.channels.map((channel) => {
           if (channel.channel_type !== "private") {
             if (channel.name.split(',')[1]) {
@@ -218,7 +220,15 @@ export class AppComponent implements OnInit {
 
   transitionToDM(anotherUser) {
     this.selectedId = anotherUser.id;
-    this.commonService.getChatDataResponse(anotherUser.id);
+    let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
+
+    if (findChannel) {
+      this.commonService.getChatDataResponse(findChannel.id);
+    } else if (!findChannel) {
+      let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
+      this.commonService.getChatDataResponse(findChannel.id);
+    }
+
     // $("#dmSearchModal").modal('hide');
     // EventService.busy(true);
     // var existingChannel = null;

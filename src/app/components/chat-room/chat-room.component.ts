@@ -55,7 +55,7 @@ export class ChatRoomComponent implements OnInit {
 
     this.commonService.getChatData.subscribe((channelId: any) => {
       if (channelId) {
-        this.channelId = 4;
+        this.channelId = channelId;
         this.getUserChats(channelId);
       }
     });
@@ -102,10 +102,12 @@ export class ChatRoomComponent implements OnInit {
 
     this.api.getMessages(channelId, this.pageNo).subscribe((response) => {
       if (response.success) {
-        if (response.length < 20) {
+        if (response.messages.length < 20) {
           this.noMore = false;
         }
-        // this.messages = this.messages.concat(newmessages);
+
+        this.messages = response.messages;
+        // this.messages = this.messages.concat(response.messages);
         this.pageNo++;
         // this.messages.forEach((message) => {
         //   message.readBy = [];
@@ -248,7 +250,7 @@ export class ChatRoomComponent implements OnInit {
     this.mentions = [];
   };
 
-  toggleModal(){
+  toggleModal() {
 
   }
 

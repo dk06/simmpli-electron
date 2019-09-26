@@ -1,4 +1,4 @@
-<div *ngIf="isLoggedIn">
+<div *ngIf="isLoggedIn" class="left-section">
   <div class="page-wrapper color-theme toggled">
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
@@ -83,5 +83,10 @@
   </div>
 </div>
 
+<div *ngIf="isLoggedIn" class="rigt-section">
+  <router-outlet></router-outlet>
+</div>
 
-<router-outlet></router-outlet>
+<div *ngIf="!isLoggedIn">
+  <router-outlet></router-outlet>
+</div>

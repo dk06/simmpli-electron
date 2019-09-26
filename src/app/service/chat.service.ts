@@ -51,12 +51,6 @@ export class ChatService {
     };
 
     return this.http.post(accessTokenOptions.url, accessTokenOptions.form, accessTokenOptions.headers).map(res => res.json());
-    // .map((res) => {
-    //   callback(undefined, res.data.access_token);
-    // }).catch((err) => {
-    //   console.log('Error connecting to w3sockets: ', err);
-    //   callback(err, undefined);
-    // });
   };
 
   pushToServer(channel, event, message, accessToken) {
@@ -78,12 +72,6 @@ export class ChatService {
     };
 
     return this.http.post(pushOptions.url, pushOptions.form, pushOptions.headers).map(res => res.json());
-    // .then((res) => {
-    //   callback(undefined, res);
-    // }).catch((err) => {
-    //   console.log('Error in pushing Notification: ', err);
-    //   callback(err, undefined);
-    // });
   };
 
   push(channel, event, message) {

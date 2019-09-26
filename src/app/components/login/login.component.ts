@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('auth_token', response.authorization.token);
 
+        //connect to notification server
         await this.chatService.push('simmpli-chat', 'new-user', {
           id: response.user.current_profile.id,
           name: response.user.current_profile.full_name

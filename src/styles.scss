@@ -18,3 +18,16 @@ a {
   background: #e0e2e6;
   border-radius: 10px;
 }
+
+.left-section {
+  width: 260px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  min-height: 100vh;
+}
+
+.rigt-section {
+  margin-left: 260px;
+  min-height: 100vh;
+}

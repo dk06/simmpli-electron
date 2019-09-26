@@ -84,7 +84,10 @@ export class ChatRoomComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadMessages();
+    this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
+    if (this.currentChannel) {
+      this.getUserChats(this.currentChannel.id);
+    }
   }
 
   getCurrentChannel() {
@@ -108,7 +111,7 @@ export class ChatRoomComponent implements OnInit {
 
     this.api.getMessages(channelId, this.pageNo).subscribe((response) => {
       if (response.success) {
-        this.noMore = false;
+        this.noMore = true;
         if (response.messages.length < 20) {
           this.noMore = false;
         }

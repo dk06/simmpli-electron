@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean;
 
   mentionSearch = "";
-  selectedId = 0;
+  selectedId: number = 0;
   channels = [];
   user: any;
   urlBase = localStorage.getItem("urlBase");
@@ -55,6 +55,10 @@ export class AppComponent implements OnInit {
         this.route.navigate(['/login']);
       }
     });
+
+    this.commonService.selectCuttentUser.subscribe((val: number) => {
+      this.selectedId = val;
+    });
   }
 
 
@@ -78,6 +82,12 @@ export class AppComponent implements OnInit {
           }
         });
 
+        this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
+        if (this.currentChannel) {
+
+          this.commonService.selectUser(this.currentChannel.channel_profiles[0].profile_id);
+        }
+
         this.publicChannels = await filter;
         // this.currentChannelFind();
 
@@ -92,7 +102,7 @@ export class AppComponent implements OnInit {
       if (response.success) {
         this.filteredUsers = await response.profiles.filter((user) => {
           return (this.user.current_profile.id != user.id);
-        });;
+        });
       }
     }, error => {
       console.log('error', error);
@@ -188,7 +198,7 @@ export class AppComponent implements OnInit {
 
   transitionToChannel(anotherUser) {
     console.log('00')
-    this.selectedId = anotherUser.id;
+    this.commonService.selectUser(anotherUser.id);
     this.commonService.getChatDataResponse(anotherUser.id);
     // $("#allSearchModal").modal('hide');
 
@@ -229,7 +239,7 @@ export class AppComponent implements OnInit {
   }
 
   transitionToDM(anotherUser) {
-    this.selectedId = anotherUser.id;
+    this.commonService.selectUser(anotherUser.id);
     let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
 
     if (findChannel) {

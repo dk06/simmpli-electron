@@ -1,20 +1,111 @@
 import { Injectable } from '@angular/core';
+import { Http, Response, Headers } from "@angular/http";
+
+
+declare var require: any;
+const config = require('../w3socket.config.json');
+
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
+
 declare var W3sockets: any;
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  // private url = 'http://localhost:3000?token=abc';
-  // private socket;
+  private hostUrl = "https://www.w3sockets.com"
+  private socket;
 
-  // socketId: any = null;
+  publicKey = "";
+  secretKey = "";
+  grantType = "client_credentials";
 
-  // constructor() {
-  //   this.socket = io(this.url);
-  // }
+  socketId: any = null;
+
+  constructor(private http: Http) {
+    console.log('w3sockets initialized');
+
+    this.publicKey = config.production.public_key;
+    this.secretKey = config.production.secret_key;
+  }
+
+  getSecretKeys() {
+    return this.http.get('./w3socket.config.json').map(res => res.json());
+
+
+  }
+
+  getAccessToken = function () {
+
+    var accessTokenOptions = {
+      url: `${this.hostUrl}/oauth/token`,
+      form: {
+        client_id: this.publicKey,
+        client_secret: this.secretKey,
+        grant_type: this.grantType
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+
+    return this.http.post(accessTokenOptions.url, accessTokenOptions.form, accessTokenOptions.headers).map(res => res.json());
+    // .map((res) => {
+    //   callback(undefined, res.data.access_token);
+    // }).catch((err) => {
+    //   console.log('Error connecting to w3sockets: ', err);
+    //   callback(err, undefined);
+    // });
+  };
+
+  pushToServer(channel, event, message, accessToken) {
+    var data = {
+      channel: `${this.publicKey}-${channel}`,
+      event: event,
+      message: message
+    };
+
+    var pushOptions: any = {
+      url: `${this.hostUrl}/api/v1/push/notify`,
+      form: {
+        access_token: accessToken,
+        data: data
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+
+    return this.http.post(pushOptions.url, pushOptions.form, pushOptions.headers).map(res => res.json());
+    // .then((res) => {
+    //   callback(undefined, res);
+    // }).catch((err) => {
+    //   console.log('Error in pushing Notification: ', err);
+    //   callback(err, undefined);
+    // });
+  };
+
+  push(channel, event, message) {
+    let ref = this;
+    return ref.getAccessToken().subscribe((accessToken) => {
+      if (accessToken) {
+        ref.pushToServer(channel, event, message, accessToken.access_token).subscribe((res) => {
+          if (res.success) {
+            console.log(res)
+            console.log(`Notification Sent`);
+          } else {
+            console.log(`Some Error :`, res);
+          }
+        });
+      } else {
+        console.log('Error connecting: ', accessToken);
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  };
+
   // connectUser = (username) => {
   //   this.socket.emit('username', username);
   // }
@@ -81,13 +172,4 @@ export class ChatService {
   //     });
   //   });
   // }
-
-  chat: string;
-  w3socket: any;
-  dndTime: any = [];
-  constructor() {
-    // const public_key = '8d957c23bd07b26295fb35077c010681f9db01be7c89674729e22c785211637b';
-    // this.w3socket = new W3sockets(public_key);
-    // var w3channel = this.w3socket.subscribe('simmpli-chat');
-  }
 }

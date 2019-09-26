@@ -1,0 +1,14 @@
+{
+    "development": {
+        "public_key": "8d957c23bd07b26295fb35077c010681f9db01be7c89674729e22c785211637b",
+        "secret_key": "ab2ef573ccfa5ec217787840f1263b358c687bbb48ca8d70dd0ad0a6bce839cb"
+    },
+    "production": {
+        "public_key": "8d957c23bd07b26295fb35077c010681f9db01be7c89674729e22c785211637b",
+        "secret_key": "ab2ef573ccfa5ec217787840f1263b358c687bbb48ca8d70dd0ad0a6bce839cb"
+    },
+    "staging": {
+        "public_key": "",
+        "secret_key": ""
+    }
+}

@@ -14,14 +14,14 @@
           <div class="user-info">
             <span class="user-name"><b> {{user.current_profile.full_name}} </b>
             </span>
-            <!-- <span class="user-status" ng-if="user.online">
+            <span class="user-status" *ngIf="user.online">
               <i class="fa fa-circle"></i>
               <span>Online</span>
             </span>
-            <span class="user-status" ng-if="!user.online">
+            <span class="user-status" *ngIf="!user.online">
               <i class="fa fa-circle" style="color: red"></i>
               <span>Offline</span>
-            </span> -->
+            </span>
           </div>
         </div>
         <div class="sidebar-menu">
@@ -45,7 +45,7 @@
               <a href="javascript:void(0)" (click)="transitionToDM(user.current_profile);"
                 [ngStyle]="((user.current_profile.id == selectedId))? activeStyle: {}">
                 <span>
-                  <!-- <i class="fa fa-circle custom-online" style="color:green"></i> -->
+                  <i class="fa fa-circle custom-online" style="color:green"></i>
                   <span>{{user.current_profile.full_name}} (you)</span>
                 </span>
               </a>
@@ -54,8 +54,8 @@
               <a href="javascript:void(0)" (click)="transitionToDM(user);"
                 [ngStyle]="((user.id == selectedId))? activeStyle: {}">
                 <span>
-                  <i class="fa fa-circle custom-online" ng-if="!user.online"></i>
-                  <i class="fa fa-circle custom-online" ng-if="user.online" style="color:green"></i>
+                  <i class="fa fa-circle custom-online" *ngIf="!user.online"></i>
+                  <i class="fa fa-circle custom-online" *ngIf="user.online" style="color:green"></i>
                   <span>{{user.full_name}}</span>
                   <span class="msg-count">1</span>
                 </span>

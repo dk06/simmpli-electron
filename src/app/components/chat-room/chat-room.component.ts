@@ -71,9 +71,9 @@ export class ChatRoomComponent implements OnInit {
 
     });
 
-    w3channel.bindEvent('new-user', (userDetails) => {
-      console.log('new user logged in');
-    })
+    // w3channel.bindEvent('new-user', (userDetails) => {
+    //   console.log('new user logged in');
+    // })
 
   }
 

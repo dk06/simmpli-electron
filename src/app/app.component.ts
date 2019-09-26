@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { CommonService } from './service/common.service';
 import { ApiService } from './service/api.service';
 import $ from 'jquery';
-import { async } from '@angular/core/testing';
+declare var w3channel: any;
+
 
 @Component({
   selector: 'app-root',
@@ -33,8 +34,17 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit() {
+    w3channel.bindEvent('new-user', (userDetails) => {
+      console.log('new user logged in');
+      this.user.online = true;
+      // const index = this.directMsg.findIndex((user) => {
+      //   return (user.id == userDetails.id);
+      // });
+    })
+
     this.commonService.loggedIn.subscribe((val: boolean) => {
       this.isLoggedIn = val;
+
       if (this.isLoggedIn) {
         this.user = JSON.parse(localStorage.getItem("user"));
 
@@ -58,10 +68,12 @@ export class AppComponent implements OnInit {
       if (response.success) {
         var filter = [];
         await response.channels.map((channel) => {
-          if (channel.name.split(',')[1]) {
-            channel.name = channel.name.split(',')[1];
+          if (channel.channel_type !== "private") {
+            if (channel.name.split(',')[1]) {
+              channel.name = channel.name.split(',')[1];
+            }
+            filter.push(channel);
           }
-          filter.push(channel);
         });
 
         this.publicChannels = await filter;

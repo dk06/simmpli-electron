@@ -23,7 +23,7 @@ export class CommonService {
     this.loggedIn.next(true);
   }
 
-  getChatDataResponse(channelId) {
+  callChatData(channelId) {
     this.getChatData.emit(channelId);
   }
 

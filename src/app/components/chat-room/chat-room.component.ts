@@ -20,7 +20,7 @@ export class ChatRoomComponent implements OnInit {
   channel: any = [];
   currentChannel: any;
   publicChannels: any;
-  messages: any;
+  messages: any = [];
   newMsg = "";
   fileComment = "";
   mentions = [];
@@ -59,6 +59,7 @@ export class ChatRoomComponent implements OnInit {
       this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
 
       if (channelId) {
+        this.messages = [];
         this.pageNo = 1;
 
         this.channelId = channelId;
@@ -116,7 +117,10 @@ export class ChatRoomComponent implements OnInit {
           this.noMore = false;
         }
 
-        this.messages = response.messages;
+        response.messages.map((msg) => {
+          this.messages.push(msg);
+        });
+
         this.scrollToBottom();
         // this.messages = this.messages.concat(response.messages);
         this.pageNo++;
@@ -143,43 +147,6 @@ export class ChatRoomComponent implements OnInit {
     this.pageNo++;
     this.getUserChats(this.channelId);
   }
-  // const flask = new CodeFlask('.code-snippet', {
-  //   language: 'js',
-  //   lineNumbers: true
-  // });
-  // // console.log(flask);
-
-  // tickColor = {
-  //   color: "red"
-  // };
-
-
-
-
-  loadMessages = () => {
-    // ChannelService.getMessages(channelId, pageNo, function (err, newmessages) {
-    //   if (newmessages) {
-    //     if (newmessages.length < 20) {
-    //       noMore = false;
-    //     }
-    //     messages = messages.concat(newmessages);
-    //     pageNo++;
-    //     messages.forEach((message) => {
-    //       message.readBy = [];
-    //       message.receivedBy = [];
-    //       message.message_profile_statuses.forEach((profile_status) => {
-    //         if (profile_status.status === "read")
-    //           message.readBy.push(profile_status);
-    //         if (profile_status.status === "received")
-    //           message.receivedBy.push(profile_status);
-    //       });
-    //     })
-    //   } else {
-    //     console.log('error getting new messages');
-    //   }
-    // });
-  }
-
 
 
   sendSnippet = () => {
@@ -214,31 +181,6 @@ export class ChatRoomComponent implements OnInit {
   //     obj.scrollTop = (obj.scrollHeight * 2);
   //   }
   // };
-
-  checkScroll = () => {
-    let list = document.querySelector('.chat-history ul');
-    // if (list.scrollHeight < 0.9 * window.innerHeight) {
-    //   console.log('inside if');
-    //   $(".chat-history ul").css(
-    //     'position', 'absolute'
-    //   );
-    //   $(".chat-history ul").css(
-    //     'margin-left', '20px'
-    //   );
-    // } else {
-    //   $(".chat-history ul").css(
-    //     'position', 'static'
-    //   );
-    //   $(".chat-history ul").css(
-    //     'margin-left', '0'
-    //   );
-    // }
-  }
-
-  // angular.element(document).ready(function() {
-  //   checkScroll();
-  //   scrollToBottom();
-  // });
 
   sendMessage = () => {
     console.log(this.mentions);

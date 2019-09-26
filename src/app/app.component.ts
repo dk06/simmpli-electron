@@ -108,71 +108,6 @@ export class AppComponent implements OnInit {
       console.log('error', error);
     })
   }
-  // privateChannels = channels.filter(channel => {
-  //   return !!(channel.channel_type === "private");
-  // });
-  // publicChannels = channels.filter(channel => {
-  //   return !(channel.channel_type === "private");
-  // });
-
-  // directMsg = users;
-  // user = localStorage.getItem("user");
-  // if(!!user) {
-  //   user = JSON.parse(user);
-  // }
-
-  activeStyle = {
-    "background": "rgba(0,0,0,0.5)",
-    "color": "#e6e6e6",
-    "font-weight": "bold"
-  };
-
-
-  // simmpliChannel.bindEvent('notification', (message) => {
-  //   console.log("---------------------------------");
-  //   console.log('simmpli notification: ', message);
-  //   console.log("---------------------------------");
-  //   EventService.notify("success", message.title, message.desc);
-  // });
-
-
-
-  // filteredUsers = users.filter((user) => {
-  //   return (user.current_profile.id != user.id);
-  // });
-
-  // W3socketService.push('simmpli-chat', 'new-user', {
-  //   id: user.current_profile.id,
-  //   name: user.current_profile.full_name
-  // });
-
-  // currentChannel = localStorage.getItem('last_active_channel');
-  // if(publicChannels.length > 0 && !currentChannel) {
-  //   currentChannel = publicChannels[0];
-  // } else {
-  //   if (currentChannel) {
-  //     currentChannel = JSON.parse(currentChannel);
-  //     if (currentChannel.channel_type === 'private') {
-  //       currentChannelDM = currentChannel;
-  //     } else {
-  //       currentChannelDM = null;
-  //     }
-  //   } else {
-  //     currentChannelDM = null;
-  //   }
-  // }
-  logout = () => {
-    console.log("User is about to logout");
-    // localStorage.clear();
-    // $state.go("login");
-    // // alert('Logout Successful')
-    // toaster.pop({
-    //   type: 'success',
-    //   title: 'Success',
-    //   body: 'Logout Successfully'
-    // });
-    // EventService.notify('success', 'Success', 'Logout Successful');
-  };
 
   transitionToCreateChannel = function () {
     // $state.go("dashboard.new-channel", {
@@ -199,35 +134,10 @@ export class AppComponent implements OnInit {
   transitionToChannel(anotherUser) {
     console.log('00')
     this.commonService.selectUser(anotherUser.id);
-    this.commonService.getChatDataResponse(anotherUser.id);
-    // $("#allSearchModal").modal('hide');
 
-    // if (channel) {
-
-    //   currentChannel = channel;
-    //   localStorage.setItem('last_active_channel', JSON.stringify(currentChannel));
-    //   $state.go("dashboard.channel-chat-window", {
-    //     channelId: channel.id,
-    //     channel: channel
-    //   });
-
-    //   if (channel.name.split(',')[1]) {
-    //     selectedId = channel.channel_profiles[0].profile_id;
-    //   }
-
-    //   if (!channel.name.split(',')[1]) {
-    //     selectedId = channel.id;
-    //   }
-    // } else {
-    //   $state.go("dashboard.no-channel");
-    // }
+    localStorage.setItem('last_active_channel', JSON.stringify(anotherUser));
+    this.commonService.callChatData(anotherUser.id);
   };
-
-  // if (currentChannel) {
-  //   currentChannelDM = currentChannel.name.split(',');
-  //   if (currentChannelDM[1]) {
-  //     currentChannelDM = currentChannelDM[1].trim();
-  //   }
 
 
   currentChannelFind() {
@@ -240,74 +150,12 @@ export class AppComponent implements OnInit {
 
   transitionToDM(anotherUser) {
     this.commonService.selectUser(anotherUser.id);
-    let findChannel = this.actualChannels.find(i => i.channel_profiles[0].profile_id == anotherUser.id);
+    let findChannel = this.actualChannels.find(i => i.channel_type == "private" && i.channel_profiles[0].profile_id == anotherUser.id);
 
     if (findChannel) {
       localStorage.setItem('last_active_channel', JSON.stringify(findChannel));
-      this.commonService.getChatDataResponse(findChannel.id);
-    } else if (!findChannel) {
-      let findChannel = this.actualChannels.find(i => i.channel_profiles[1].profile_id == anotherUser.id);
-      this.commonService.getChatDataResponse(findChannel.id);
+      this.commonService.callChatData(findChannel.id);
     }
-
-    // $("#dmSearchModal").modal('hide');
-    // EventService.busy(true);
-    // var existingChannel = null;
-    // if (privateChannels) {
-    //   existingChannel = privateChannels.find(function (userWithChannel) {
-    //     if (anotherUser.id != user.current_profile.id) {
-    //       if (userWithChannel.channel_profiles.length > 1) {
-    //         let bool = (userWithChannel.channel_profiles[0].profile_id == anotherUser.id ||
-    //           userWithChannel.channel_profiles[1].profile_id == anotherUser.id);
-    //         return (bool);
-    //       }
-    //     }
-    //     if (userWithChannel.channel_profiles.length == 1) {
-    //       return userWithChannel.channel_profiles[0].profile_id == anotherUser.id;
-    //     }
-    //     return false;
-    //   });
-    // }
-    // if (existingChannel) {
-    //   currentChannel = existingChannel;
-    //   console.log(currentChannel);
-    //   currentChannelDM = currentChannel;
-    //   EventService.busy(false);
-    //   localStorage.setItem('last_active_channel', JSON.stringify(currentChannel));
-    //   $state.go("dashboard.channel-chat-window", {
-    //     channelId: existingChannel.id,
-    //     channel: existingChannel
-    //   });
-    // } else {
-    //   console.log("channel needs to be created");
-    //   var newChannel = {
-    //     conversation_type: "channel",
-    //     channel_type: "private",
-    //     name: `${user.current_profile.full_name}, ${
-    //       anotherUser.full_name
-    //       }`,
-    //     purpose: `Direct Messaging with ${anotherUser.full_name}`,
-    //     channel_profiles_attributes: [{
-    //       profile_id: anotherUser.id,
-    //       active: true
-    //     }]
-    //   };
-    //   ChannelService.createChannel(newChannel, function (err, res) {
-    //     if (err) {
-    //       console.log("error in creating channel");
-    //     } else {
-    //       console.log("channel for DM created successfully");
-    //       // console.log('new channel created :', res)
-    //       currentChannel = res;
-    //       currentChannelDM = currentChannel;
-    //       EventService.busy(false);
-    //       localStorage.setItem('last_active_channel', JSON.stringify(currentChannel));
-    //       $state.go("dashboard.channel-chat-window", {
-    //         channelId: res.id,
-    //         channel: res
-    //       });
-    //     }
-    //   });
   }
 
 }

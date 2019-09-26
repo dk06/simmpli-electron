@@ -35,6 +35,15 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit() {
+
+    this.user = JSON.parse(localStorage.getItem("user"));
+
+    if (this.user) {
+      this.commonService.setCurrentUser(this.user);
+    } else {
+      this.route.navigate(['/login']);
+    }
+
     w3channel.bindEvent('new-user', (userDetails) => {
       console.log('new user logged in');
       this.user.online = true;
@@ -51,8 +60,6 @@ export class AppComponent implements OnInit {
 
         this.getChannels();
         this.getUsers();
-      } else {
-        this.route.navigate(['/login']);
       }
     });
 
@@ -108,6 +115,14 @@ export class AppComponent implements OnInit {
       console.log('error', error);
     })
   }
+
+
+  activeStyle = {
+    "background": "rgba(0,0,0,0.5)",
+    "color": "#e6e6e6",
+    "font-weight": "bold"
+  };
+
 
   transitionToCreateChannel = function () {
     // $state.go("dashboard.new-channel", {

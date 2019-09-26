@@ -45,7 +45,8 @@
               <a href="javascript:void(0)" (click)="transitionToDM(user.current_profile);"
                 [ngStyle]="((user.current_profile.id == selectedId))? activeStyle: {}">
                 <span>
-                  <i class="fa fa-circle custom-online" style="color:green"></i>
+                  <i class="fa fa-circle custom-online" *ngIf="user.online" style="color:green"></i>
+                  <i class="fa fa-circle custom-online" *ngIf="!user.online"></i>
                   <span>{{user.current_profile.full_name}} (you)</span>
                 </span>
               </a>

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonService } from './service/common.service';
 import { ApiService } from './service/api.service';
 import $ from 'jquery';
+import { ChatService } from './service/chat.service';
 declare var w3channel: any;
 
 
@@ -26,11 +27,20 @@ export class AppComponent implements OnInit {
   filteredUsers: any;
   publicChannels: any;
   actualChannels: any;
+  selectedUsers: any = [];
+  newChannel = {
+    conversation_type: "channel",
+    channel_type: "public",
+    name: "",
+    purpose: "",
+    channel_profiles_attributes: []
+  };
 
   constructor(
     private commonService: CommonService,
     private route: Router,
-    private api: ApiService
+    private api: ApiService,
+    private chatService: ChatService
   ) {
     setTimeout(() => {
 
@@ -53,7 +63,7 @@ export class AppComponent implements OnInit {
       // const index = this.directMsg.findIndex((user) => {
       //   return (user.id == userDetails.id);
       // });
-    })
+    });
 
     this.commonService.loggedIn.subscribe((val: boolean) => {
       this.isLoggedIn = val;
@@ -181,8 +191,89 @@ export class AppComponent implements OnInit {
       }
     });
 
-    localStorage.setItem('last_active_channel', JSON.stringify(channel));
-    this.commonService.callChatData(channel);
+    if (channel) {
+      localStorage.setItem('last_active_channel', JSON.stringify(channel));
+      this.commonService.callChatData(channel);
+    } else {
+      this.createChannel(anotherUser);
+    }
+
   }
+
+  createChannel(anotherUser) {
+    console.log("channel needs to be created");
+    var newChannel = {
+      conversation_type: "channel",
+      channel_type: "private",
+      name: `${this.user.current_profile.full_name}, ${
+        anotherUser.full_name
+        }`,
+      purpose: `Direct Messaging with ${anotherUser.full_name}`,
+      channel_profiles_attributes: [{
+        profile_id: anotherUser.id,
+        active: true
+      }]
+    };
+    this.commonService.loaderShow();
+    this.api.createChannel(newChannel).subscribe(async (res) => {
+      if (res.success) {
+        console.log("channel for DM created successfully");
+
+        this.currentChannel = res.channel;
+
+        localStorage.setItem('last_active_channel', JSON.stringify(this.currentChannel));
+        await res.channel.channel_profiles.forEach(profile => {
+          console.log(`pushing on: new-message-${profile.profile_id}`)
+          this.chatService.push(`simmpli-chat`, `new-channel-${profile.profile_id}`, {
+            message: "You got added to a new channel",
+            channel: this.currentChannel
+          });
+        });
+        this.commonService.loaderHide();
+
+        this.getChannels();
+
+        await this.commonService.callChatData(res.channel.id);
+        // $state.go("dashboard.channel-chat-window", {
+        //   channelId: res.id,
+        //   channel: res
+        // });
+      } else {
+        this.commonService.loaderHide();
+        console.log('error');
+      }
+    }, error => {
+      this.commonService.loaderHide();
+
+      console.log('error', error);
+    });
+  }
+
+  createNewChannel = function () {
+    this.selectedUsers.forEach(selectedUser => {
+      this.newChannel.channel_profiles_attributes.push({
+        profile_id: selectedUser.id,
+        active: true
+      });
+    });
+    this.commonService.loaderShow();
+    this.api.createChannel(this.newChannel).subscribe(res => {
+      this.commonService.loaderHide();
+      if (res.success) {
+        console.log('channel created successfully');
+
+        this.commonService.callChatData(res.channel.id);
+
+        // $state.go('dashboard.channel-chat-window', {
+        //   channelId: res.id,
+        //   channel: res
+        // });
+      } else {
+        console.log('error in creating channel');
+      }
+    }, error => {
+      console.log('error', error);
+    })
+  };
 
 }

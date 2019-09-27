@@ -17,8 +17,8 @@ import { ChatService } from './chat.service';
 export class CommonService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public getChatData: EventEmitter<any> = new EventEmitter<any>();
-  public selectCuttentUser: EventEmitter<number> = new EventEmitter<number>();
+  public getChatData: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public selectCuttentUser: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
 
   public online: Observable<any>;
@@ -46,11 +46,11 @@ export class CommonService {
   }
 
   callChatData(channel) {
-    this.getChatData.emit(channel);
+    this.getChatData.next(channel);
   }
 
   selectUser(id) {
-    this.selectCuttentUser.emit(id);
+    this.selectCuttentUser.next(id);
   }
 
   notify(type, title, body) {

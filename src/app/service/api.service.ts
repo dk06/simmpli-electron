@@ -10,7 +10,7 @@ export class ApiService {
 
   // baseUrl: String = 'http://192.168.1.34:3002';
 
-  baseUrl: any = 'http://192.168.0.177:3000';
+  baseUrl: any = 'http://localhost:3000';
 
   constructor(private http: Http) {
     console.log("connected Login");
@@ -97,37 +97,10 @@ export class ApiService {
   }
 
   createChannel = (channel) => {
-
-    return this.http.post(`${this.baseUrl}/chat/channelsthis.`, { channel: channel }, this.headers()).map(res => res.json());
-    //   console.log(res);
-    //   res.data.channel.channel_profiles.forEach(profile => {
-    //     console.log(`pushing on: new-message-${profile.profile_id}`)
-    //     // W3socketService.push(`simmpli-chat`, `new-channel-${profile.profile_id}`, {
-    //     //   message: "You got added to a new channel",
-    //     //   channel: res.data.channel
-    //     // });
-    //   });
-    //   callback(undefined, res.data.channel);
-    // })
-    // .catch(err => {
-    //   console.log('error in creating channel');
-    //   callback(err, undefined);
-    // });
+    return this.http.post(`${this.baseUrl}/chat/channels`, { channel: channel }, { headers: this.getHeader() }).map(res => res.json());
   }
 
   sendMessage = (channelId, message, mentions) => {
-
     return this.http.post(`${this.baseUrl}/chat/channels/${channelId}/messages`, { message: { body: message, message_profiles_attributes: mentions } }, { headers: this.getHeader() }).map(res => res.json());
-    //   console.log(res.data.message)
-    //   channel.channel_profiles.forEach(profile => {
-    //     console.log(`pushing on: new-message-${profile.profile_id}`)
-    //     // W3socketService.push(`simmpli-chat`, `new-message-${profile.profile_id}`, res.data.message);
-    //   });
-    //   callback(undefined, res.data.message);
-    // })
-    // .catch(err => {
-    //   console.log(JSON.stringify(err));
-    //   callback(err, undefined);
-    // });
   }
 }

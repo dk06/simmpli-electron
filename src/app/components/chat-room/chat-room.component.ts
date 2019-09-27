@@ -58,8 +58,6 @@ export class ChatRoomComponent implements OnInit {
   ) {
 
     this.commonService.getChatData.subscribe((channel: any) => {
-      this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
-
       if (channel) {
         this.messages = [];
         this.pageNo = 1;
@@ -96,12 +94,11 @@ export class ChatRoomComponent implements OnInit {
       console.log('new-message', message);
     });
 
-    w3channel.bindEvent(`new-channel-${this.channelId}`, (data) => {
+    w3channel.bindEvent(`new-channel-${this.currentUser.current_profile.id}`, (data) => {
       console.log('new channel created: ', data.message);
       if (data.channel.channel_type === "public") {
         console.log('new channel logged in');
       }
-
     });
 
     // w3channel.bindEvent('new-user', (userDetails) => {
@@ -137,6 +134,7 @@ export class ChatRoomComponent implements OnInit {
   }
   getUserChats(channelId) {
     this.commonService.loaderShow();
+    this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
 
     this.api.getMessages(channelId, this.pageNo).subscribe(async (response) => {
       if (response.success) {

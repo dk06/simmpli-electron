@@ -4,7 +4,7 @@
     <div class="chat-with" *ngIf="!currentChannel.name.split(',')[1]"># {{currentChannel.name}}</div>
     <div class="chat-details">
       <div *ngIf="!currentChannel.name.split(',')[1]">
-        <i class="fa fa-user"></i> <a href="#"
+        <i class="fa fa-user"></i> <a href="javascript:void(0)"
           title="View member list">{{currentChannel.currentChannel_profiles.length}}</a> |
         <i class="fa fa-thumbtack"></i> 0 | <a><i class="fa fa-pen"></i></a>
       </div>
@@ -16,10 +16,10 @@
     </div>
   </div>
   <div class="chat-options">
-    <a href="#">
+    <a href="javascript:void(0)">
       <i class="fa fa-info-circle"></i>
     </a>
-    <a href="#">
+    <a href="javascript:void(0)">
       <i class="fa fa-cog"></i>
     </a>
   </div>
@@ -39,8 +39,8 @@
       <div class="message-data" id="message-{{message.id}}">
         <div class="">
           <div class="profile-pic-div float-left">
-            <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}" alt="PP" onError="this.src='./assets/image/user.png'"
-              class="user-pic-small">
+            <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}"
+              alt="PP" onError="this.src='./assets/image/user.png'" class="user-pic-small">
           </div>
           <div class="message-div float-left">
             <span class="message-data-name">{{message.profile ? message.profile.full_name : '--'}}</span>
@@ -111,7 +111,7 @@
           <ul class="dropdown mention-dropdown" *ngIf="mention.length">
             <!-- <li *ngFor="let choice of mention.choices" [ngClass]="{active:mention.activeChoice==choice}"
               (click)="select(choice)">
-              <a href="#">{{::choice.full_name}}</a>
+              <a href="javascript:void(0)">{{::choice.full_name}}</a>
             </li> -->
           </ul>
         </div>

@@ -1,0 +1,94 @@
+<div class="new-channel">
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Create a channel</h4>
+        <p class="card-subtitle">
+
+          <span>Channels are where your members communicate. They're best when organize around a
+            topic-#leads, for example</span>
+
+        </p>
+        <!-- </br> -->
+        <div>
+          <!-- <label class="switch" style="display:  inline;" (click)="toggle()" >
+              <input type="checkbox"  checked hidden > -->
+
+
+          <div class="btn-switch" ng-class="{'btn-switch--on':switch}" [(ngModel)]="switch" (click)="toggle()"
+            style="display:  inline-flex;">
+            <span class="public" id="myDIV1">Public</span>
+            <span class="private" id="myDIV2"> </span>
+
+            <div class="btn-switch-circle" ng-class="{'btn-switch-circle--on':switch}"
+              [(ngModel)]="switch" (click)="toggle()"></div>
+          </div>
+          <!-- <span class="slider round" > -->
+
+          <!-- </label> -->
+          <span id="text">
+            Anyone in your workspace can view and join this channel
+          </span>
+        </div>
+        <!-- </span> -->
+        <!-- </br> -->
+        <form>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" aria-describedby="emailHelp" [(ngModel)]="channel.name">
+            <small id="name" class="form-text text-muted">Names must be lowercase, without spaces or periods, and
+              shorter
+              than 22 characters.</small>
+          </div>
+          <div class="form-group">
+            <label for="purpose">Purpose</label>
+            <input type="text" class="form-control" id="purpose" [(ngModel)]="channel.purpose">
+            <small id="purpose" class="form-text text-muted">What's this channel about?</small>
+          </div>
+          <div class="form-group">
+            <label for="purpose">Select People</label>
+            <div class="selected-people" *ngFor="let user of filteredUsers">
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+                title="Type in a name" style="
+              width: -webkit-fill-available;" (click)="myVar()">
+              <input type="checkbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]" hidden>
+              <!-- <ul id="myUL">
+                <li><a href="#">Adele</a></li>
+                <li><a href="#">Agnes</a></li>
+
+                <li><a href="#">Billy</a></li>
+                <li><a href="#">Bob</a></li>
+
+                <li><a href="#">Calvin</a></li>
+                <li><a href="#">Christina</a></li>
+                <li><a href="#">Cindy</a></li>
+              </ul> -->
+              <!-- <input type="textbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]"> -->
+            </div>
+            <div class="people-list" *ngIf="myvalue">
+              <div id="myUL" class="people-list-item" *ngFor="let user of filteredUsers">
+                <input type="checkbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]" hidden>
+                <span>{{user.full_name}}</span>
+              </div>
+            </div>
+            <small id="name" class="form-text text-muted">Select up to 1000 people to add this channel.</small>
+          </div>
+          <div class="form-group" style="display:flex; justify-content: space-between">
+            <button type="submit" (click)="createNewChannel()" class="btn btn-outline-primary">Create
+              Channel</button>
+            <button type="button" routerLinkActive="active" routerLink="/chat-room"
+              class="btn btn-outline-danger">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function myFunction() {
+    console.log("8098900")
+  }
+
+</script>

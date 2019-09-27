@@ -27,14 +27,6 @@ export class AppComponent implements OnInit {
   filteredUsers: any;
   publicChannels: any;
   actualChannels: any;
-  selectedUsers: any = [];
-  newChannel = {
-    conversation_type: "channel",
-    channel_type: "public",
-    name: "",
-    purpose: "",
-    channel_profiles_attributes: []
-  };
 
   constructor(
     private commonService: CommonService,
@@ -248,32 +240,5 @@ export class AppComponent implements OnInit {
       console.log('error', error);
     });
   }
-
-  createNewChannel = function () {
-    this.selectedUsers.forEach(selectedUser => {
-      this.newChannel.channel_profiles_attributes.push({
-        profile_id: selectedUser.id,
-        active: true
-      });
-    });
-    this.commonService.loaderShow();
-    this.api.createChannel(this.newChannel).subscribe(res => {
-      this.commonService.loaderHide();
-      if (res.success) {
-        console.log('channel created successfully');
-
-        this.commonService.callChatData(res.channel.id);
-
-        // $state.go('dashboard.channel-chat-window', {
-        //   channelId: res.id,
-        //   channel: res
-        // });
-      } else {
-        console.log('error in creating channel');
-      }
-    }, error => {
-      console.log('error', error);
-    })
-  };
 
 }

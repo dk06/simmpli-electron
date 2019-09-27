@@ -1,0 +1,91 @@
+.new-channel {
+  position: relative;
+  top: 12px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  justify-content: center;
+}
+
+.people-list-btn {
+  border: 1px #ced4da solid;
+}
+
+.people-list {
+  height: 200px;
+  overflow-y: scroll;
+  border: #ced4da 1px solid;
+  border-radius: 0.25rem;
+  margin-top: 15px;
+}
+
+.people-list-item {
+  padding: 15px 20px;
+  border-bottom: #ced4da 1px solid;
+}
+
+.people-list-item:hover {
+  background: #ced4da;
+}
+
+.selected-people {
+  height: 40px;
+  border: #ced4da 1px solid;
+  border-radius: 0.25rem;
+  overflow-x: scroll;
+}
+
+.btn-switch {
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 29px;
+  cursor: pointer;
+  background-color: #f7905f;
+  border: 2px solid #f7905f;
+  border-radius: 40px;
+}
+
+.btn-switch-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border-radius: 40px;
+}
+
+
+
+.btn-switch--on {
+  background-color: #0f7d02;
+  border: 2px solid #0f7d02;
+}
+
+.btn-switch-circle--on {
+  left: auto;
+  right: 0;
+}
+
+.public {
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  left: 4px;
+}
+
+.private {
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  right: 16px;
+  left: 0;
+}

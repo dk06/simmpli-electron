@@ -14,13 +14,15 @@ import { AutofocuseDirective } from './directives/autofocuse.directive';
 
 // Import library module
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NewChannelComponent } from './components/new-channel/new-channel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
     LoginComponent,
-    AutofocuseDirective
+    AutofocuseDirective,
+    NewChannelComponent
   ],
   imports: [
     BrowserModule,

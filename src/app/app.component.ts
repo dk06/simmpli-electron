@@ -110,8 +110,6 @@ export class AppComponent implements OnInit {
         }
 
         this.publicChannels = await filter;
-        // this.currentChannelFind();
-
       }
     }, error => {
       console.log('error', error);
@@ -168,14 +166,6 @@ export class AppComponent implements OnInit {
     this.commonService.callChatData(anotherUser);
   };
 
-
-  currentChannelFind() {
-    var currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
-    if (currentChannel) {
-      this.transitionToDM(currentChannel.profile_id);
-    }
-
-  }
 
   transitionToDM(anotherUser) {
     this.commonService.selectUser(anotherUser.id);

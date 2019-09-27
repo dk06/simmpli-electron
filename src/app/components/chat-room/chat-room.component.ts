@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ChatService } from 'src/app/service/chat.service';
 import { CommonService } from 'src/app/service/common.service';
 import { ApiService } from 'src/app/service/api.service';
+import { async } from '@angular/core/testing';
 declare var w3channel: any;
 
 @Component({
@@ -67,9 +68,30 @@ export class ChatRoomComponent implements OnInit {
       }
     });
 
-    w3channel.bindEvent(`new-message-${this.currentUser.current_profile.id}`, (message) => {
+    // this.commonService.updateMessageData.subscribe(() => {
+    //   this.getUserChats(this.channelId);
+    // });
 
-      this.messages.push(message);
+    w3channel.bindEvent(`new-message-${this.currentUser.current_profile.id}`, async (message) => {
+
+      await this.api.markAsReceived(message.channel_id, message.id).subscribe(async (res) => {
+        console.log("response from mark as received: -", res);
+        // this.commonService.updateMsg();
+        // message.profile = message.profile ? message.profile : '';
+        // this.messages.push(message);
+        // this.scrollToBottom();
+        this.ngOnInit();
+        // await this.messages.sort((a, b) => a.id - b.id);
+
+      });
+
+      await this.api.markAsRead(message.channel_id).subscribe(async () => {
+        console.log('marked as read on same channel');
+        // this.commonService.updateMsg();
+      });
+
+
+
       console.log('====================================');
       console.log(message);
       console.log('====================================');
@@ -94,6 +116,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.messages = [];
     this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
     if (this.currentChannel) {
       this.getUserChats(this.currentChannel.id);
@@ -118,8 +141,7 @@ export class ChatRoomComponent implements OnInit {
     }
   }
   getUserChats(channelId) {
-
-    this.api.getMessages(channelId, this.pageNo).subscribe((response) => {
+    this.api.getMessages(channelId, this.pageNo).subscribe(async (response) => {
       if (response.success) {
         this.noMore = true;
         if (response.messages.length < 20) {
@@ -127,16 +149,18 @@ export class ChatRoomComponent implements OnInit {
         }
 
 
-        response.messages.map((msg) => {
+        await response.messages.map((msg) => {
           this.messages.push(msg);
         });
 
-        this.messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        await this.scrollToBottom();
+        await this.messages.sort((a, b) => a.id - b.id);
+        // await this.messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
 
-        this.scrollToBottom();
+
         // this.messages = this.messages.concat(response.messages);
-        this.pageNo++;
+        // this.pageNo++;
         // this.messages.forEach((message) => {
         //   message.readBy = [];
         //   message.receivedBy = [];

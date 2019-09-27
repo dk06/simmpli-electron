@@ -10,7 +10,7 @@ export class ApiService {
 
   // baseUrl: String = 'http://192.168.1.34:3002';
 
-  baseUrl: any = 'http://localhost:3000';
+  baseUrl: any = 'http://192.168.0.177:3000';
 
   constructor(private http: Http) {
     console.log("connected Login");
@@ -43,7 +43,7 @@ export class ApiService {
     return this.http.get(this.baseUrl + "/chat/channels", { headers: this.getHeader() }).map(res => res.json());
   }
 
-  sendFile = (channel, message, files, callback) => {
+  sendFile = (channel, message, files) => {
 
     if (files && files.length) {
       files.forEach(file => {
@@ -87,16 +87,16 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/chat/channels/${channelId}/messages?page=${pageNo}`, { headers: this.getHeader() }).map(res => res.json());
   }
 
-  markAsReceived = (channelId, messageId, callback) => {
+  markAsReceived = (channelId, messageId) => {
     return this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/${messageId}/mark_as_received`, {}, { headers: this.getHeader() }).map(res => res.json());
 
   }
 
-  markAsRead = (channelId, callback) => {
+  markAsRead = (channelId) => {
     return this.http.put(`${this.baseUrl}/chat/channels/${channelId}/messages/mark_as_read`, {}, { headers: this.getHeader() }).map(res => res.json());
   }
 
-  createChannel = (channel, callback) => {
+  createChannel = (channel) => {
 
     return this.http.post(`${this.baseUrl}/chat/channelsthis.`, { channel: channel }, this.headers()).map(res => res.json());
     //   console.log(res);

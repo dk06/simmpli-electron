@@ -18,7 +18,7 @@
     "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
     "ng:serve": "ng serve",
-    "ng:serve:web": "ng serve -o",
+    "ng:serve:web": "ng serve -o --host 192.168.0.177 --disable-host-check",
     "electron:serve-tsc": "tsc -p tsconfig.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
     "electron:local": "npm run build:prod && electron .",

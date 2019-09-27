@@ -10,12 +10,14 @@ import { ChatService } from './service/chat.service';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { LoginComponent } from './components/login/login.component';
 import { ApiService } from './service/api.service';
+import { AutofocuseDirective } from './directives/autofocuse.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
-    LoginComponent
+    LoginComponent,
+    AutofocuseDirective
   ],
   imports: [
     BrowserModule,

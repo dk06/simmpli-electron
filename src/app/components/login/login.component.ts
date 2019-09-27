@@ -26,7 +26,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    let user = JSON.parse(localStorage.getItem("user"));
 
+    if (user) {
+      this.commonService.setCurrentUser(user);
+    } else {
+      this.route.navigate(['/login']);
+    }
   }
 
   login() {

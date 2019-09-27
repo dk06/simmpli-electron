@@ -4,7 +4,8 @@
     <div class="chat-with" *ngIf="!currentChannel.name.split(',')[1]"># {{currentChannel.name}}</div>
     <div class="chat-details">
       <div *ngIf="!currentChannel.name.split(',')[1]">
-        <i class="fas fa-user"></i> <a href="#" title="View member list">{{currentChannel.currentChannel_profiles.length}}</a> |
+        <i class="fas fa-user"></i> <a href="#"
+          title="View member list">{{currentChannel.currentChannel_profiles.length}}</a> |
         <i class="fas fa-thumbtack"></i> 0 | <a><i class="fas fa-pen"></i></a>
       </div>
       <div *ngIf="currentChannel.name.split(',')[1]">
@@ -38,11 +39,11 @@
       <div class="message-data" id="message-{{message.id}}">
         <div class="">
           <div class="profile-pic-div float-left">
-            <img src="{{urlBase + message.profile.dp_url_small}}" alt="PP" onError="this.src='./assets/image/user.png'"
+            <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}" alt="PP" onError="this.src='./assets/image/user.png'"
               class="user-pic-small">
           </div>
           <div class="message-div float-left">
-            <span class="message-data-name">{{message.profile.full_name}}</span>
+            <span class="message-data-name">{{message.profile ? message.profile.full_name : '--'}}</span>
             <!-- <span class="message-data-name" ng-hide=(message.profile.full_name)>{{message.sender_name}}</span> -->
             <span class="message-data-time small">
               {{message.created_at | date}}
@@ -103,7 +104,7 @@
         </div>
         <div class="ui-mention-container">
           <input type="text" class="form-control shadow-none" placeholder="" aria-label="send-message"
-            aria-describedby="button-addon1" [(ngModel)]="newMsg" [ngModelOptions]="{standalone: true}" autofocus
+            aria-describedby="button-addon1" [(ngModel)]="newMsg" [ngModelOptions]="{standalone: true}" appAutofocuse
             ui-mention my-mention ng-trim="false" ng-keypress="($event.which === 13)?sendMessage():0"
             smart-area="areaConfig">
           <div class="ui-mention-highlight"></div>

@@ -80,7 +80,8 @@ export class ChatRoomComponent implements OnInit {
         // message.profile = message.profile ? message.profile : '';
         // this.messages.push(message);
         // this.scrollToBottom();
-        this.ngOnInit();
+
+
         // await this.messages.sort((a, b) => a.id - b.id);
 
       });
@@ -91,7 +92,8 @@ export class ChatRoomComponent implements OnInit {
       });
 
 
-
+      this.ngOnInit();
+      this.commonService.notify('success', 'Success', message.body);
       console.log('====================================');
       console.log(message);
       console.log('====================================');

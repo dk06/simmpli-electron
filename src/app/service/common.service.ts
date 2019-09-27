@@ -8,6 +8,7 @@ import "rxjs/add/observable/throw";
 import "rxjs/add/observable/fromEvent";
 import { ChatService } from './chat.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -51,6 +52,26 @@ export class CommonService {
   selectUser(id) {
     this.selectCuttentUser.emit(id);
   }
+
+  notify(type, title, body) {
+    console.log('Notification: ', type, title, body);
+
+    // toaster.pop({
+    //     type: 'success',
+    //     title: title,
+    //     body: body
+    // });
+
+    let myNotification = new Notification(title, {
+      body: body
+    });
+
+    console.log(myNotification);
+    // console.log('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
+    // const noise = new Audio('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
+    // noise.play();
+  };
+
   logout() {
 
     this.loggedIn.next(false);

@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
     let user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
+      this.route.navigate(['/chat-room']);
       this.commonService.setCurrentUser(user);
     } else {
       this.route.navigate(['/login']);

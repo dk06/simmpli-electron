@@ -67,7 +67,7 @@
             </ul>
             <div class="fixed-bottom bottom-menu">
               <a href="javascript:void(0)avascript:void(0)" (click)="logOut();" class="header-menu">
-                <span class="fas fa-power-off" style="padding-right: 5px"></span>
+                <span class="fa fa-power-off" style="padding-right: 5px"></span>
                 <span style="padding: 0">
                   Logout
                 </span>
@@ -92,4 +92,9 @@
   <div *ngIf="!isLoggedIn">
     <router-outlet></router-outlet>
   </div>
+
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+    <p style="font-size: 20px; color: white">Processing...</p>
+  </ngx-spinner>
+
 </div>

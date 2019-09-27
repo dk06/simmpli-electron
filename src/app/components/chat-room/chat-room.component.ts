@@ -136,6 +136,8 @@ export class ChatRoomComponent implements OnInit {
     }
   }
   getUserChats(channelId) {
+    this.commonService.loaderShow();
+
     this.api.getMessages(channelId, this.pageNo).subscribe(async (response) => {
       if (response.success) {
         this.noMore = true;
@@ -166,10 +168,16 @@ export class ChatRoomComponent implements OnInit {
         //       message.receivedBy.push(profile_status);
         //   });
         // })
+        this.commonService.loaderHide();
+
       } else {
+        this.commonService.loaderHide();
+
         console.log('error getting new messages');
       }
     }, error => {
+      this.commonService.loaderHide();
+
       console.log('error', error);
     });
   }
@@ -231,6 +239,7 @@ export class ChatRoomComponent implements OnInit {
         profile_id: mention.profile_id
       };
     });
+    this.commonService.loaderShow();
     this.api.sendMessage(this.channelId, this.newMsg, this.mentions).subscribe((response) => {
       if (response.success) {
         console.log("received");
@@ -243,14 +252,20 @@ export class ChatRoomComponent implements OnInit {
         this.messages.push(response.message);
         this.ref.detectChanges();
         this.scrollToBottom();
+        this.commonService.loaderHide();
+
         // this.pageNo++;
         // this.getUserChats(this.channelId);
       } else {
         console.log("some error in sedning messages");
       }
+      this.newMsg = "";
+      this.mentions = [];
+    }, error => {
+      this.commonService.loaderHide();
+      console.log('error', error);
     });
-    this.newMsg = "";
-    this.mentions = [];
+
   };
 
   toggleModal() {
@@ -288,7 +303,7 @@ export class ChatRoomComponent implements OnInit {
       if (obj) {
         obj.scrollTop = (obj.scrollHeight * 2);
       }
-    }, 300);
+    }, 100);
   }
 
 }

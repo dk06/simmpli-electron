@@ -47,6 +47,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "ng6-toastr-notifications": "^1.0.4",
+    "ngx-spinner": "^8.0.3",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.5.3",

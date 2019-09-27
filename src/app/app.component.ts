@@ -37,7 +37,6 @@ export class AppComponent implements OnInit {
     }, 3000);
   }
   ngOnInit() {
-
     this.checkUser();
     this.commonService.online.subscribe(() => {
       $('#networkCheck').removeClass('disable-div');
@@ -102,6 +101,7 @@ export class AppComponent implements OnInit {
             filter.push(channel);
           }
         });
+        this.commonService.loaderHide();
 
         this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
         if (this.currentChannel) {

@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response, Headers } from "@angular/http";
+import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -7,6 +8,7 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import "rxjs/add/observable/fromEvent";
 import { ChatService } from './chat.service';
+
 
 
 @Injectable({
@@ -23,7 +25,10 @@ export class CommonService {
   public offline: Observable<any>;
 
 
-  constructor(private http: Http, private chatService: ChatService
+  constructor(
+    private http: Http,
+    private chatService: ChatService,
+    private spinner: NgxSpinnerService
   ) {
 
     this.online = Observable.fromEvent(window, 'online');
@@ -66,6 +71,15 @@ export class CommonService {
     // const noise = new Audio('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
     // noise.play();
   };
+
+  loaderShow() {
+    this.spinner.show();
+  }
+
+  loaderHide() {
+    this.spinner.hide();
+
+  }
 
   logout() {
 

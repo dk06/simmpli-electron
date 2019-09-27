@@ -12,6 +12,9 @@ import { LoginComponent } from './components/login/login.component';
 import { ApiService } from './service/api.service';
 import { AutofocuseDirective } from './directives/autofocuse.directive';
 
+// Import library module
+import { NgxSpinnerModule } from "ngx-spinner";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +27,8 @@ import { AutofocuseDirective } from './directives/autofocuse.directive';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
+    NgxSpinnerModule
   ],
   providers: [CommonService, ChatService, ApiService],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ChatService } from 'src/app/service/chat.service';
 import { CommonService } from 'src/app/service/common.service';
 import { ApiService } from 'src/app/service/api.service';
@@ -53,7 +53,8 @@ export class ChatRoomComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     private commonService: CommonService,
-    private api: ApiService
+    private api: ApiService,
+    private ref: ChangeDetectorRef
   ) {
 
     this.commonService.getChatData.subscribe((channel: any) => {
@@ -68,32 +69,24 @@ export class ChatRoomComponent implements OnInit {
       }
     });
 
-    // this.commonService.updateMessageData.subscribe(() => {
-    //   this.getUserChats(this.channelId);
-    // });
-
     w3channel.bindEvent(`new-message-${this.currentUser.current_profile.id}`, async (message) => {
 
       await this.api.markAsReceived(message.channel_id, message.id).subscribe(async (res) => {
         console.log("response from mark as received: -", res);
-        // this.commonService.updateMsg();
-        // message.profile = message.profile ? message.profile : '';
-        // this.messages.push(message);
-        // this.scrollToBottom();
-
-
-        // await this.messages.sort((a, b) => a.id - b.id);
 
       });
 
       await this.api.markAsRead(message.channel_id).subscribe(async () => {
         console.log('marked as read on same channel');
-        // this.commonService.updateMsg();
       });
 
 
-      this.ngOnInit();
       this.commonService.notify('success', 'Success', message.body);
+      message.profile = message.profile ? message.profile : '';
+      this.messages.push(message);
+      this.scrollToBottom();
+      this.ref.detectChanges();
+
       console.log('====================================');
       console.log(message);
       console.log('====================================');
@@ -246,9 +239,12 @@ export class ChatRoomComponent implements OnInit {
             this.chatService.push(`simmpli-chat`, `new-message-${element.profile_id}`, response.message);
           }
         });
-
+        response.message.profile = response.message.profile ? response.message.profile : '';
+        this.messages.push(response.message);
+        this.ref.detectChanges();
+        this.scrollToBottom();
         // this.pageNo++;
-        this.getUserChats(this.channelId);
+        // this.getUserChats(this.channelId);
       } else {
         console.log("some error in sedning messages");
       }

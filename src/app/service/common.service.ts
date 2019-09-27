@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import 'rxjs/add/operator/map';
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
+import "rxjs/add/observable/fromEvent";
 import { ChatService } from './chat.service';
 
 @Injectable({
@@ -13,11 +14,18 @@ import { ChatService } from './chat.service';
 export class CommonService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public getChatData: EventEmitter<number> = new EventEmitter<number>();
+  public getChatData: EventEmitter<any> = new EventEmitter<any>();
   public selectCuttentUser: EventEmitter<number> = new EventEmitter<number>();
+
+  public online: Observable<any>;
+  public offline: Observable<any>;
+
 
   constructor(private http: Http, private chatService: ChatService
   ) {
+
+    this.online = Observable.fromEvent(window, 'online');
+    this.offline = Observable.fromEvent(window, 'offline');
     console.log("connected Login");
   }
 
@@ -30,8 +38,8 @@ export class CommonService {
     this.loggedIn.next(true);
   }
 
-  callChatData(channelId) {
-    this.getChatData.emit(channelId);
+  callChatData(channel) {
+    this.getChatData.emit(channel);
   }
 
   selectUser(id) {

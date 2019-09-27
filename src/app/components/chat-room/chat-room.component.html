@@ -45,7 +45,7 @@
             <span class="message-data-name">{{message.profile.full_name}}</span>
             <!-- <span class="message-data-name" ng-hide=(message.profile.full_name)>{{message.sender_name}}</span> -->
             <span class="message-data-time small">
-              {{message.created_at | date: 'short'}}
+              {{message.created_at | date}}
             </span>
             <p>{{message.body}}</p>
             <div class="message-attachment" *ngFor="let attachment of message.message_attachments">

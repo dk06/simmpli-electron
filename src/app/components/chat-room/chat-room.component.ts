@@ -17,7 +17,7 @@ export class ChatRoomComponent implements OnInit {
   noMore = true;
   urlBase = localStorage.getItem("urlBase");
   channelId: number = 0;
-  channel: any = [];
+  channel: any;
   currentChannel: any;
   publicChannels: any;
   messages: any = [];
@@ -55,19 +55,28 @@ export class ChatRoomComponent implements OnInit {
     private api: ApiService
   ) {
 
-    this.commonService.getChatData.subscribe((channelId: any) => {
+    this.commonService.getChatData.subscribe((channel: any) => {
       this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
 
-      if (channelId) {
+      if (channel) {
         this.messages = [];
         this.pageNo = 1;
-
-        this.channelId = channelId;
-        this.getUserChats(channelId);
+        this.channel = channel;
+        this.channelId = channel.id;
+        this.getUserChats(channel.id);
       }
     });
-    w3channel.bindEvent(`new-message-${this.channelId}`, (message) => {
 
+    w3channel.bindEvent(`new-message-${this.currentUser.current_profile.id}`, (message) => {
+
+      this.messages.push(message);
+      console.log('====================================');
+      console.log(message);
+      console.log('====================================');
+    });
+
+    w3channel.bindEvent(`new-message-${this.channelId}`, (message) => {
+      console.log('new-message', message);
     });
 
     w3channel.bindEvent(`new-channel-${this.channelId}`, (data) => {
@@ -117,9 +126,13 @@ export class ChatRoomComponent implements OnInit {
           this.noMore = false;
         }
 
+
         response.messages.map((msg) => {
           this.messages.push(msg);
         });
+
+        this.messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
 
         this.scrollToBottom();
         // this.messages = this.messages.concat(response.messages);
@@ -184,6 +197,9 @@ export class ChatRoomComponent implements OnInit {
 
   sendMessage = () => {
     console.log(this.mentions);
+    if (!this.channelId) {
+      return;
+    }
     this.mentions = this.mentions.filter((mention) => {
       return this.newMsg.includes(`@${mention.full_name}`)
     });
@@ -194,11 +210,19 @@ export class ChatRoomComponent implements OnInit {
     this.mentions = this.mentions.map((mention) => {
       return {
         profile_id: mention.profile_id
-      }
+      };
     });
     this.api.sendMessage(this.channelId, this.newMsg, this.mentions).subscribe((response) => {
       if (response.success) {
         console.log("received");
+        response.message.message_profile_statuses.forEach(element => {
+          if (element.profile_id !== this.currentUser.current_profile.id) {
+            this.chatService.push(`simmpli-chat`, `new-message-${element.profile_id}`, response.message);
+          }
+        });
+
+        // this.pageNo++;
+        this.getUserChats(this.channelId);
       } else {
         console.log("some error in sedning messages");
       }

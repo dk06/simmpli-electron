@@ -32,3 +32,21 @@ a {
   min-height: 100vh;
   overflow: hidden;
 }
+
+
+.disable-div {
+  filter: grayscale(100%);
+  cursor: pointer;
+
+  button {
+    pointer-events: none;
+  }
+
+  a {
+    pointer-events: none;
+  }
+
+  input {
+    pointer-events: none;
+  }
+}

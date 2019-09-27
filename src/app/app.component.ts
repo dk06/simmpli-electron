@@ -32,17 +32,21 @@ export class AppComponent implements OnInit {
     private route: Router,
     private api: ApiService
   ) {
+    setTimeout(() => {
 
+    }, 3000);
   }
   ngOnInit() {
 
-    this.user = JSON.parse(localStorage.getItem("user"));
+    this.checkUser();
+    this.commonService.online.subscribe(() => {
+      $('#networkCheck').removeClass('disable-div');
+    });
 
-    if (this.user) {
-      this.commonService.setCurrentUser(this.user);
-    } else {
-      this.route.navigate(['/login']);
-    }
+    this.commonService.offline.subscribe(() => {
+      $('#networkCheck').addClass('disable-div');
+      this.checkUser();
+    });
 
     w3channel.bindEvent('new-user', (userDetails) => {
       console.log('new user logged in');
@@ -66,6 +70,16 @@ export class AppComponent implements OnInit {
     this.commonService.selectCuttentUser.subscribe((val: number) => {
       this.selectedId = val;
     });
+  }
+
+  checkUser() {
+    this.user = JSON.parse(localStorage.getItem("user"));
+
+    if (this.user) {
+      this.commonService.setCurrentUser(this.user);
+    } else {
+      this.route.navigate(['/login']);
+    }
   }
 
 
@@ -151,7 +165,7 @@ export class AppComponent implements OnInit {
     this.commonService.selectUser(anotherUser.id);
 
     localStorage.setItem('last_active_channel', JSON.stringify(anotherUser));
-    this.commonService.callChatData(anotherUser.id);
+    this.commonService.callChatData(anotherUser);
   };
 
 
@@ -178,7 +192,7 @@ export class AppComponent implements OnInit {
     });
 
     localStorage.setItem('last_active_channel', JSON.stringify(channel));
-    this.commonService.callChatData(channel.id);
+    this.commonService.callChatData(channel);
   }
 
 }

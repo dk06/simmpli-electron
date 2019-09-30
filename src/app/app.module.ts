@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
+import { UiSwitchModule } from 'ngx-toggle-switch';
 import { AppComponent } from './app.component';
 import { CommonService } from './service/common.service';
 import { ChatService } from './service/chat.service';
@@ -12,17 +13,17 @@ import { LoginComponent } from './components/login/login.component';
 import { ApiService } from './service/api.service';
 import { AutofocuseDirective } from './directives/autofocuse.directive';
 
+
 // Import library module
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NewChannelComponent } from './components/new-channel/new-channel.component';
-
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
     LoginComponent,
     AutofocuseDirective,
-    NewChannelComponent
+    NewChannelComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +31,8 @@ import { NewChannelComponent } from './components/new-channel/new-channel.compon
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    UiSwitchModule
   ],
   providers: [CommonService, ChatService, ApiService],
   bootstrap: [AppComponent]

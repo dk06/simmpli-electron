@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
@@ -32,7 +32,8 @@ export class AppComponent implements OnInit {
     private commonService: CommonService,
     private route: Router,
     private api: ApiService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private ref: ChangeDetectorRef
   ) {
     setTimeout(() => {
 
@@ -50,11 +51,15 @@ export class AppComponent implements OnInit {
     });
 
     w3channel.bindEvent('new-user', (userDetails) => {
-      console.log('new user logged in');
+      console.log('new user logged in', userDetails);
       this.user.online = true;
-      // const index = this.directMsg.findIndex((user) => {
-      //   return (user.id == userDetails.id);
-      // });
+
+      let index = this.filteredUsers.findIndex(i => i.id == userDetails.id);
+      if (index >= 0) {
+        this.filteredUsers[index].online = true;
+        this.ref.detectChanges();
+      }
+
     });
 
     this.commonService.loggedIn.subscribe((val: boolean) => {
@@ -124,10 +129,14 @@ export class AppComponent implements OnInit {
         this.filteredUsers = await response.profiles.filter((user) => {
           return (this.user.current_profile.id != user.id);
         });
+
+        this.filteredUsers.forEach(element => {
+          element.online = false;
+        });
       }
     }, error => {
       console.log('error', error);
-    })
+    });
   }
 
 

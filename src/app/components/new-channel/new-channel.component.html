@@ -7,22 +7,20 @@
 
           <span>Channels are where your members communicate. They're best when organize around a
             topic-#leads, for example</span>
-
         </p>
         <!-- </br> -->
         <div>
-          <!-- <label class="switch" style="display:  inline;" (click)="toggle()" >
-              <input type="checkbox"  checked hidden > -->
 
+          <ui-switch labelOn="Private" labelOff="Public"  (change)="onChangeChannelStatus($event)"></ui-switch>
 
-          <div class="btn-switch" ng-class="{'btn-switch--on':switch}" [(ngModel)]="switch" (click)="toggle()"
+          <!-- <div class="btn-switch" ng-class="{'btn-switch--on':switch}" [(ngModel)]="switch" (click)="toggle()"
             style="display:  inline-flex;">
             <span class="public" id="myDIV1">Public</span>
             <span class="private" id="myDIV2"> </span>
 
-            <div class="btn-switch-circle" ng-class="{'btn-switch-circle--on':switch}"
-              [(ngModel)]="switch" (click)="toggle()"></div>
-          </div>
+            <div class="btn-switch-circle" ng-class="{'btn-switch-circle--on':switch}" [(ngModel)]="switch"
+              (click)="toggle()"></div>
+          </div> -->
           <!-- <span class="slider round" > -->
 
           <!-- </label> -->

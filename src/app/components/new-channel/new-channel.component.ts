@@ -50,6 +50,9 @@ export class NewChannelComponent implements OnInit {
   }
 
 
+  onChangeChannelStatus(event) {
+    console.log('event', event);
+  }
   toggle() {
     !this.switch == this.switch;
     var x = document.getElementById("myDIV1");

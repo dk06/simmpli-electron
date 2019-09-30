@@ -33,6 +33,18 @@ a {
   overflow: hidden;
 }
 
+.switch,
+.switch-medium {
+  width: 82px !important;
+}
+
+.switch-medium.switch-labeled.checked small {
+  left: 51px !important;
+}
+
+.switch-medium.checked small {
+  left: 51px !important;
+}
 
 .disable-div {
   filter: grayscale(100%);

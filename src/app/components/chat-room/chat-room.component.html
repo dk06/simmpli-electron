@@ -2,10 +2,10 @@
   <div class="chat-about" *ngIf="currentChannel">
     <div class="chat-with" *ngIf="currentChannel.name.split(',')[1]">{{currentChannel.name.split(', ')[1]}}</div>
     <div class="chat-with" *ngIf="!currentChannel.name.split(',')[1]"># {{currentChannel.name}}</div>
-    <div class="chat-details">
+    <div class="chat-details" *ngIf="currentChannel">
       <div *ngIf="!currentChannel.name.split(',')[1]">
-        <i class="fa fa-user"></i> <a href="javascript:void(0)"
-          title="View member list">{{currentChannel.currentChannel_profiles.length}}</a> |
+        <i class="fa fa-user"></i>
+        <a href="javascript:void(0)" title="View member list">{{currentChannel.channel_profiles.length}}</a> |
         <i class="fa fa-thumbtack"></i> 0 | <a><i class="fa fa-pen"></i></a>
       </div>
       <div *ngIf="currentChannel.name.split(',')[1]">

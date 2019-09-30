@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonService } from 'src/app/service/common.service';
 import { ApiService } from 'src/app/service/api.service';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+
 
 @Component({
   selector: 'app-new-channel',
@@ -21,69 +23,68 @@ export class NewChannelComponent implements OnInit {
     channel_profiles_attributes: []
   };
 
-  // toggle = function () {
-  //   !toggle.switch == toggle.switch;
-  //   console.log("9999999999999999")
-  // };
-
-  myVar = function () {
-    console.log("888888888888888888");
-    this.myvalue = true
-  }
-
   selectedUsers: any = [];
-  newChannel = {
-    conversation_type: "channel",
-    channel_type: "public",
-    name: "",
-    purpose: "",
-    channel_profiles_attributes: []
-  };
+  dropdownList: any = [];
+  dropdownSettings: IDropdownSettings = {};
 
   constructor(
     private commonService: CommonService,
     private api: ApiService,
-    private route: Router
-  ) { }
-
-  ngOnInit() {
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
+  ) {
+    this.dropdownList = JSON.parse(this.route.snapshot.params['queryParams']);
   }
 
+  ngOnInit() {
+
+    // this.selectedItems = [
+    //   { item_id: 3, item_text: 'Pune' },
+    //   { item_id: 4, item_text: 'Navsari' }
+    // ];
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'full_name',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+  }
+
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+  onSelectAll(items: any) {
+    console.log(items);
+  }
 
   onChangeChannelStatus(event) {
     console.log('event', event);
-  }
-  toggle() {
-    !this.switch == this.switch;
-    var x = document.getElementById("myDIV1");
-    var z = document.getElementById("myDIV2");
-    var y = document.getElementById("text");
-
-    if (x.innerHTML === "Public" && z.innerHTML === " ") {
-      x.innerHTML = " ";
-      z.innerHTML = "Private"
-      y.innerHTML = "This channel can only be joined and viewed by invite"
+    if (event) {
+      this.channel.channel_type = 'private';
     } else {
-      x.innerHTML = "Public";
-      z.innerHTML = " "
-      y.innerHTML = "Anyone your workspace can view and join this channel"
+      this.channel.channel_type = 'public';
     }
   }
 
   createNewChannel = function () {
     this.selectedUsers.forEach(selectedUser => {
-      this.newChannel.channel_profiles_attributes.push({
+      this.channel.channel_profiles_attributes.push({
         profile_id: selectedUser.id,
         active: true
       });
     });
     this.commonService.loaderShow();
-    this.api.createChannel(this.newChannel).subscribe(res => {
+    this.api.createChannel(this.channel).subscribe(res => {
       this.commonService.loaderHide();
       if (res.success) {
         console.log('channel created successfully');
 
-        this.commonService.callChatData(res.channel.id);
+        this.router.navigate(['/home']);
+        // this.commonService.callChatData(res.channel.id);
 
         // $state.go('dashboard.channel-chat-window', {
         //   channelId: res.id,

@@ -19,6 +19,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { NewChannelComponent } from './components/new-channel/new-channel.component';
 import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './service/modal.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +37,8 @@ import { ModalService } from './service/modal.service';
     ReactiveFormsModule,
     HttpModule,
     NgxSpinnerModule,
-    UiSwitchModule
+    UiSwitchModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [CommonService, ChatService, ApiService, ModalService],
   bootstrap: [AppComponent]

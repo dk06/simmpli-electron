@@ -140,6 +140,10 @@ export class AppComponent implements OnInit {
     });
   }
 
+  createNewChannel() {
+    this.route.navigate(['/creat-channel', { queryParams: JSON.stringify(this.filteredUsers) }]);
+  }
+
 
   activeStyle = {
     "background": "rgba(0,0,0,0.5)",

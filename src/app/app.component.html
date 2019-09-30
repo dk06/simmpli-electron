@@ -29,7 +29,7 @@
             <ul>
               <li class="header-menu">
                 <span class="ml-2">Channels</span>
-                <i class="fa fa-plus" routerLinkActive="active" routerLink="/creat-channel"></i>
+                <i class="fa fa-plus" (click)="createNewChannel()"></i>
               </li>
               <li *ngFor="let channel of publicChannels">
                 <a href="javascript:void(0)" (click)="transitionToChannel(channel);"

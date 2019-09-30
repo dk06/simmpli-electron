@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.commonService.loaderHide();
     let user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {

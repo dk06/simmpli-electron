@@ -178,7 +178,8 @@ ul {
   padding-top: 52px;
   padding-bottom: 90px;
   /* margin-right: 260px */
-  overflow: hidden
+  overflow: hidden;
+  z-index: 9;
 }
 
 .chat-header {
@@ -187,6 +188,7 @@ ul {
   width: calc(100vw - 260px);
   left: 260px;
   border-bottom: 1px solid #ccc;
+  z-index: 9;
 }
 
 .chat-header img {
@@ -210,11 +212,16 @@ ul {
 
 .chat-history {
   padding: 30px;
-  overflow-y: scroll;
   margin-top: 80px;
-  height: calc(100vh - 167px);
   padding-bottom: 0px;
-  overflow-x: hidden;
+  display: flex;
+  align-items: flex-end;
+
+  .chat-div {
+    height: calc(100vh - 195px);
+    overflow: hidden;
+    overflow-y: scroll;
+  }
 }
 
 .chat-history ul {
@@ -229,6 +236,7 @@ ul {
   padding: 0px 25px;
   left: 260px;
   background: #fff;
+  z-index: 9;
 }
 
 .chat-message button {

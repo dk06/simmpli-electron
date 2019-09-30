@@ -17,6 +17,8 @@ import { AutofocuseDirective } from './directives/autofocuse.directive';
 // Import library module
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NewChannelComponent } from './components/new-channel/new-channel.component';
+import { ModalComponent } from './modal/modal.component';
+import { ModalService } from './service/modal.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,7 @@ import { NewChannelComponent } from './components/new-channel/new-channel.compon
     LoginComponent,
     AutofocuseDirective,
     NewChannelComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,7 @@ import { NewChannelComponent } from './components/new-channel/new-channel.compon
     NgxSpinnerModule,
     UiSwitchModule
   ],
-  providers: [CommonService, ChatService, ApiService],
+  providers: [CommonService, ChatService, ApiService, ModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

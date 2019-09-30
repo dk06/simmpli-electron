@@ -11,25 +11,11 @@
         <!-- </br> -->
         <div>
 
-          <ui-switch labelOn="Private" labelOff="Public"  (change)="onChangeChannelStatus($event)"></ui-switch>
-
-          <!-- <div class="btn-switch" ng-class="{'btn-switch--on':switch}" [(ngModel)]="switch" (click)="toggle()"
-            style="display:  inline-flex;">
-            <span class="public" id="myDIV1">Public</span>
-            <span class="private" id="myDIV2"> </span>
-
-            <div class="btn-switch-circle" ng-class="{'btn-switch-circle--on':switch}" [(ngModel)]="switch"
-              (click)="toggle()"></div>
-          </div> -->
-          <!-- <span class="slider round" > -->
-
-          <!-- </label> -->
+          <ui-switch labelOn="Private" labelOff="Public" (change)="onChangeChannelStatus($event)"></ui-switch>
           <span id="text">
             Anyone in your workspace can view and join this channel
           </span>
         </div>
-        <!-- </span> -->
-        <!-- </br> -->
         <form>
           <div class="form-group">
             <label for="name">Name</label>
@@ -46,22 +32,10 @@
           <div class="form-group">
             <label for="purpose">Select People</label>
             <div class="selected-people" *ngFor="let user of filteredUsers">
-              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
-                title="Type in a name" style="
+              <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name" style="
               width: -webkit-fill-available;" (click)="myVar()">
               <input type="checkbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]" hidden>
-              <!-- <ul id="myUL">
-                <li><a href="#">Adele</a></li>
-                <li><a href="#">Agnes</a></li>
 
-                <li><a href="#">Billy</a></li>
-                <li><a href="#">Bob</a></li>
-
-                <li><a href="#">Calvin</a></li>
-                <li><a href="#">Christina</a></li>
-                <li><a href="#">Cindy</a></li>
-              </ul> -->
-              <!-- <input type="textbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]"> -->
             </div>
             <div class="people-list" *ngIf="myvalue">
               <div id="myUL" class="people-list-item" *ngFor="let user of filteredUsers">
@@ -82,11 +56,3 @@
     </div>
   </div>
 </div>
-
-
-<script>
-  function myFunction() {
-    console.log("8098900")
-  }
-
-</script>

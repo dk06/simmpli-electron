@@ -2,7 +2,10 @@ import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@an
 import { ChatService } from 'src/app/service/chat.service';
 import { CommonService } from 'src/app/service/common.service';
 import { ApiService } from 'src/app/service/api.service';
-import { async } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import $ from 'jquery';
+import { ModalService } from 'src/app/service/modal.service';
+
 declare var w3channel: any;
 
 @Component({
@@ -47,6 +50,7 @@ export class ChatRoomComponent implements OnInit {
       mode: 'replace'
     }]
   };
+  bodyText: string;
 
   userId: any;
 
@@ -54,7 +58,9 @@ export class ChatRoomComponent implements OnInit {
     private chatService: ChatService,
     private commonService: CommonService,
     private api: ApiService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    private route: Router,
+    private modalService: ModalService
   ) {
 
     this.commonService.getChatData.subscribe((channel: any) => {
@@ -67,6 +73,9 @@ export class ChatRoomComponent implements OnInit {
       }
     });
 
+    if (!this.currentUser) {
+      this.route.navigate(['/login']);
+    }
     w3channel.bindEvent(`new-message-${this.currentUser.current_profile.id}`, async (message) => {
 
       await this.api.markAsReceived(message.channel_id, message.id).subscribe(async (res) => {
@@ -111,6 +120,9 @@ export class ChatRoomComponent implements OnInit {
     this.messages = [];
     this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
     if (this.currentChannel) {
+      this.commonService.selectUser(this.currentChannel.id);
+      this.channelId = this.currentChannel.id;
+
       this.getUserChats(this.currentChannel.id);
     }
   }
@@ -266,8 +278,21 @@ export class ChatRoomComponent implements OnInit {
 
   };
 
-  toggleModal() {
+  toggleModal(id, bool) {
+    console.log(id);
+    if (bool) {
+      $(id).modal('show');
+    } else {
+      $(id).modal('hide');
+    }
+  }
 
+  openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
   }
 
   // $scope.$on('addMention', (e, data) => {

@@ -1,5 +1,5 @@
 <div class="chat-header clearfix fixed-top">
-  <div class="chat-about">
+  <div class="chat-about" *ngIf="currentChannel">
     <div class="chat-with" *ngIf="currentChannel.name.split(',')[1]">{{currentChannel.name.split(', ')[1]}}</div>
     <div class="chat-with" *ngIf="!currentChannel.name.split(',')[1]"># {{currentChannel.name}}</div>
     <div class="chat-details">
@@ -25,57 +25,59 @@
   </div>
 </div>
 
-<div class="chat-history" id="messageBox">
-  <ul style="padding:0">
-    <div *ngIf="noMore" class="text-center">
-      <button class="btn btn-outline-secondary" (click)="loadMoreMessages();">Load More</button>
-    </div>
-    <div *ngIf="!noMore" class="text-center">
-      This is the beginning of the conversation.
-    </div>
-    <br>
-    <li class="clearfix" *ngFor="let message of messages">
+<div class="chat-history">
+  <div class="chat-div" id="messageBox">
+    <ul style="padding:0">
+      <div *ngIf="noMore" class="text-center">
+        <button class="btn btn-outline-secondary" (click)="loadMoreMessages();">Load More</button>
+      </div>
+      <div *ngIf="!noMore" class="text-center">
+        This is the beginning of the conversation.
+      </div>
+      <br>
+      <li class="clearfix" *ngFor="let message of messages">
 
-      <div class="message-data" id="message-{{message.id}}">
-        <div class="">
-          <div class="profile-pic-div float-left">
-            <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}"
-              alt="PP" onError="this.src='./assets/image/user.png'" class="user-pic-small">
-          </div>
-          <div class="message-div float-left">
-            <span class="message-data-name">{{message.profile ? message.profile.full_name : '--'}}</span>
-            <!-- <span class="message-data-name" ng-hide=(message.profile.full_name)>{{message.sender_name}}</span> -->
-            <span class="message-data-time small">
-              {{message.created_at | date}}
-            </span>
-            <p>{{message.body}}</p>
-            <div class="message-attachment" *ngFor="let attachment of message.message_attachments">
-              <div class="attachment-name">
-                <span>
-                  <a class="" href="{{urlBase + attachment.attachment_url}}"
-                    download="{{attachment.attachment_file_name}}">
-                    <i class="fa fa-download"></i>
-                  </a>
-                </span>
-                <span>{{attachment.attachment_file_name}}</span>
+        <div class="message-data" id="message-{{message.id}}">
+          <div class="">
+            <div class="profile-pic-div float-left">
+              <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}"
+                alt="PP" onError="this.src='./assets/image/user.png'" class="user-pic-small">
+            </div>
+            <div class="message-div float-left">
+              <span class="message-data-name">{{message.profile ? message.profile.full_name : '--'}}</span>
+              <!-- <span class="message-data-name" ng-hide=(message.profile.full_name)>{{message.sender_name}}</span> -->
+              <span class="message-data-time small">
+                {{message.created_at | date}}
+              </span>
+              <p>{{message.body}}</p>
+              <div class="message-attachment" *ngFor="let attachment of message.message_attachments">
+                <div class="attachment-name">
+                  <span>
+                    <a class="" href="{{urlBase + attachment.attachment_url}}"
+                      download="{{attachment.attachment_file_name}}">
+                      <i class="fa fa-download"></i>
+                    </a>
+                  </span>
+                  <span>{{attachment.attachment_file_name}}</span>
+                </div>
+
+                <img src="{{attachment.attachment_url}}" alt="">
               </div>
-
-              <img src="{{attachment.attachment_url}}" alt="">
+            </div>
+            <div class="read-div float-left">
+              <!-- <i class="fa fa-check-double ticks" style="color:blue"
+                *ngIf="message.readBy.length === channel.channel_profiles.length"></i>
+              <i class="fa fa-check ticks" *ngIf="message.receivedBy.length === channel.channel_profiles.length"
+                style="color:green"></i>
+              <i class="fa fa-check ticks"
+                *ngIf="(message.readBy.length !== channel.channel_profiles.length) && (message.receivedBy.length !== channel.channel_profiles.length)"
+                style="color:red"></i> -->
             </div>
           </div>
-          <div class="read-div float-left">
-            <!-- <i class="fa fa-check-double ticks" style="color:blue"
-              *ngIf="message.readBy.length === channel.channel_profiles.length"></i>
-            <i class="fa fa-check ticks" *ngIf="message.receivedBy.length === channel.channel_profiles.length"
-              style="color:green"></i>
-            <i class="fa fa-check ticks"
-              *ngIf="(message.readBy.length !== channel.channel_profiles.length) && (message.receivedBy.length !== channel.channel_profiles.length)"
-              style="color:red"></i> -->
-          </div>
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 
 </div> <!-- end chat-history -->
 
@@ -90,13 +92,13 @@
               <i class="fa fa-plus"></i>
             </button>
             <div class="dropdown-menu share-dropdown">
-              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#shareModal', true);">
+              <div class="dropdown-item cursor-pointer" (click)="openModal('custom-modal-1')">
                 Share File from PC
               </div>
-              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#snippetModal', true);">
+              <div class="dropdown-item cursor-pointer" (click)="openModal('custom-modal-2')">
                 Share Code Snippet
               </div>
-              <div class="dropdown-item cursor-pointer" (click)="toggleModal('#dmSearchModal', true)">
+              <div class="dropdown-item cursor-pointer" (click)="openModal('custom-modal-3')">
                 Share File via Drive
               </div>
             </div>
@@ -134,31 +136,47 @@
 
 </div>
 
-<div class="modal" tabindex="-1" role="dialog" id="shareModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Upload File from PC</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <button class="btn-secondary btn btn-block" multiple="true" (input)="uploadFiles(files)">
-              Select files
-            </button>
-          </div>
-          <div class="form-group">
-            <input type="text" name="comment" id="comment" class="form-control" placeholder="Your comments here.."
-              [(ngModel)]="fileComment" [ngModelOptions]="{standalone: true}">
-          </div>
-        </form>
-      </div>
+<jw-modal id="custom-modal-1">
+  <h4>Upload File from PC</h4>
+  <form>
+    <div class="form-group">
+      <button class="btn-secondary btn btn-block" multiple="true" (input)="uploadFiles(files)">
+        Select files
+      </button>
     </div>
+    <div class="form-group">
+      <!-- <input type="text" name="comment" id="comment" class="form-control" placeholder="Your comments here.."
+        [(ngModel)]="fileComment" [ngModelOptions]="{standalone: true}"> -->
+    </div>
+  </form> <button (click)="closeModal('custom-modal-1');">Close</button>
+</jw-modal>
+
+<jw-modal id="custom-modal-2">
+  <h4>Share Code Snippets</h4>
+  <span>{{snippet}}</span>
+  <div class="form-group" style="display:flex; justify-content: space-between">
+    <button type="submit" (click)="sendSnippet()" class="btn btn-outline-primary w-50">
+      Send Snippet
+    </button>
+    <button type="button" (click)="toggleModal('#snippetModal', false)"
+      class="btn w-50 btn-outline-danger">Cancel</button>
   </div>
-</div>
+  <button (click)="closeModal('custom-modal-2');">Close</button>
+</jw-modal>
+
+<jw-modal id="custom-modal-3">
+  <h4>Search People</h4>
+  <!-- <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control"
+          placeholder="enter your search text here..."> -->
+  <br>
+  <div class="people-list">
+    <!-- <div class="people-list-item" *ngFor="let item of list"="channel in channels | filter: searchText"
+              (click)="transitionToChannel(channel)">
+              <span>#{{channel.name}}</span>
+            </div> -->
+  </div>
+  <button (click)="closeModal('custom-modal-3');">Close</button>
+</jw-modal>
 
 <div class="modal" tabindex="-1" role="dialog" id="dmSearchModal">
   <div class="modal-dialog" role="document">
@@ -172,7 +190,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control"
+        <!-- <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control"
           placeholder="enter your search text here...">
         <br>
         <div class="people-list">
@@ -180,7 +198,7 @@
             (click)="transitionToDM(user)">
             <span>{{user.full_name}}</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -198,14 +216,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control"
-          placeholder="enter your search text here...">
+        <!-- <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control"
+          placeholder="enter your search text here..."> -->
         <br>
         <div class="people-list">
-          <div class="people-list-item" *ngFor="let item of list"="channel in channels | filter: searchText"
+          <!-- <div class="people-list-item" *ngFor="let item of list"="channel in channels | filter: searchText"
             (click)="transitionToChannel(channel)">
             <span>#{{channel.name}}</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

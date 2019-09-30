@@ -75,6 +75,7 @@ export class AppComponent implements OnInit {
 
     this.commonService.selectCuttentUser.subscribe((val: number) => {
       this.selectedId = val;
+      this.route.navigate(['/chat-room']);
     });
   }
 

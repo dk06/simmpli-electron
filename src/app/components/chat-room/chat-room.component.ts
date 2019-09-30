@@ -242,9 +242,12 @@ export class ChatRoomComponent implements OnInit {
         this.fileComment = "";
         console.log('file uploaded');
       } else {
+        this.commonService.loaderHide();
 
         console.log('error uploading file : ');
       }
+    }, error => {
+      this.commonService.loaderHide();
     });
   }
 

@@ -7,6 +7,7 @@ import { ApiService } from './service/api.service';
 import $ from 'jquery';
 import { ChatService } from './service/chat.service';
 declare var w3channel: any;
+declare var simmpliChannel: any;
 
 
 @Component({
@@ -48,6 +49,13 @@ export class AppComponent implements OnInit {
     this.commonService.offline.subscribe(() => {
       $('#networkCheck').addClass('disable-div');
       this.checkUser();
+    });
+
+    simmpliChannel.bindEvent('notification', (message) => {
+      console.log("---------------------------------");
+      console.log('simmpli notification: ', message);
+      console.log("---------------------------------");
+      this.commonService.notify("success", message.title, message.desc)
     });
 
     w3channel.bindEvent('new-user', (userDetails) => {

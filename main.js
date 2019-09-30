@@ -1,13 +1,32 @@
-const {app,  BrowserWindow, shell, ipcMain , dialog} = require("electron");
+const {app,  BrowserWindow, shell, ipcMain , dialog , Menu,  Tray} = require("electron");
 const electron = require('electron')
 const path = require("path");
 const url = require("url");
 
-let win, serve;
+let win, serve, isQuiting;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
+// const nativeImage = electron.nativeImage;
+// let appIcon = nativeImage.createFromPath(path.join(__dirname, 'app', 'assets', 'image', 'simmpli-64x64.png'));
+
 function createWindow() {
+
+//   // appIcon = new Tray(__dirname + "/src/app/assets/image/simmpli-64x64.png")
+//   appIcon = new Tray(__dirname + "/assets/image/simmpli-64x64.png")
+
+//   const contextMenu = Menu.buildFromTemplate([
+//       { label: 'Show App', click:  function(){
+//           win.show();
+//       } },
+//       { label: 'Quit', click:  function(){
+//           application.isQuiting = true;
+//           application.quit();
+//       } }
+//  ]);
+
+//   appIcon.setToolTip('This is my application.')
+//   appIcon.setContextMenu(contextMenu)
 
   const {
     width,
@@ -20,6 +39,7 @@ function createWindow() {
     y: 0,
     width: width,
     height: height,
+    // icon: appIcon,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -43,11 +63,17 @@ function createWindow() {
   }
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null;
+  win.on('close', (event) => {
+    if (isQuiting) {
+      console.log('app close');
+
+      win = null
+    } else {
+      console.log('app working background');
+
+      event.preventDefault()
+      win.hide()
+    }
   });
 
 }
@@ -58,6 +84,10 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
+
+  app.on('before-quit', function () {
+    isQuiting = true;
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

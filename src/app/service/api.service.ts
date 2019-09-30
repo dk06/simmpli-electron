@@ -43,19 +43,24 @@ export class ApiService {
     return this.http.get(this.baseUrl + "/chat/channels", { headers: this.getHeader() }).map(res => res.json());
   }
 
-  sendFile(channelId, message, files) {
-
-    let formData = new FormData();
-    for (var i = 0; i < files.length; i++) {
-      formData.append("message_attachments_attributes[]", files[i], files[i].name);
-    }
+  sendFile(channelId, message, files: any) {
 
     let data: any = {
       message: {
         body: message,
-        formData
+        message_attachments_attributes: []
       },
     }
+
+    // data.message.message_attachments_attributes = files;
+    // let formData = new FormData();
+
+    if (files && files.length) {
+      files.forEach(file => {
+        data.message.message_attachments_attributes.push({ attachment: file });
+      });
+    }
+
 
     return this.http.post(this.baseUrl + `/chat/channels/${channelId}/messages`, data, { headers: this.getHeader() }).map(res => res.json());
 

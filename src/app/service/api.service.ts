@@ -43,39 +43,49 @@ export class ApiService {
     return this.http.get(this.baseUrl + "/chat/channels", { headers: this.getHeader() }).map(res => res.json());
   }
 
-  sendFile = (channel, message, files) => {
+  sendFile(channelId, message, files) {
 
-    if (files && files.length) {
-      files.forEach(file => {
-        if (!file.$error) {
-          // Upload.upload({
-          //   url: `${this.baseUrl}/chat/channels/${channel.id}/messages`,
-          //   data: {
-          //     message: {
-          //       body: message,
-          //       message_attachments_attributes: [{
-          //         attachment: file
-          //       }]
-          //     },
-          //   },
-          //   method: 'POST',
-          //   headers: header
-          // }).then((res) => {
-          //   console.log('inside response');
-          //   console.log(res);
-          //   channel.channel_profiles.forEach(profile => {
-          //     console.log(`pushing on: new-message-${profile.profile_id}`)
-          //     // W3socketService.push(`simmpli-chat`, `new-message-${profile.profile_id}`, res.data.message);
-          //   });
-          //   callback(undefined, res);
-          // }).catch((err) => {
-          //   console.log('error uploading files');
-          //   console.log(err);
-          //   callback(err, undefined);
-          // })
-        }
-      });
+    let formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append("message_attachments_attributes[]", files[i], files[i].name);
     }
+
+    let data: any = {
+      message: {
+        body: message,
+        formData
+      },
+    }
+
+    return this.http.post(this.baseUrl + `/chat/channels/${channelId}/messages`, data, { headers: this.getHeader() }).map(res => res.json());
+
+    // if (files && files.length) {
+    //   files.forEach(file => {
+    //     if (!file.$error) {
+    //       Upload.upload({
+    //         url: `${this.baseUrl}/chat/channels/${channelId}/messages`,
+    //         data: {
+    //           message: {
+    //             body: message,
+    //             message_attachments_attributes: [{
+    //               attachment: file
+    //             }]
+    //           },
+    //         },
+    //         method: 'POST',
+    //         headers: { headers: this.getHeader() }
+    //       }).then((res) => {
+    //         console.log('inside response');
+    //         console.log(res);
+    //         callback(undefined, res);
+    //       }).catch((err) => {
+    //         console.log('error uploading files');
+    //         console.log(err);
+    //         callback(err, undefined);
+    //       })
+    //     }
+    //   });
+    // }
 
   }
 

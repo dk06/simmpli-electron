@@ -30,6 +30,8 @@ export class ChatRoomComponent implements OnInit {
   mentions = [];
   mention = [];
   pageNo = 1;
+  urls = new Array<string>();
+  uploadedFiles: any;
 
 
   currentUser = JSON.parse(localStorage.getItem("user"));
@@ -198,21 +200,52 @@ export class ChatRoomComponent implements OnInit {
     this.getUserChats(this.channelId);
   }
 
+  detectFiles(event) {
+    this.urls = [];
+    let files = event.target.files;
+    if (files) {
+      this.uploadedFiles = files;
+      for (let file of files) {
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.urls.push(e.target.result);
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+  }
 
   sendSnippet = () => {
     // console.log('inside snippet: ', flask.getCode());
   }
 
-  uploadFiles = (files) => {
-    // ChannelService.sendFile(channel, fileComment, files, function (err, res) {
-    //   if (err) {
-    //     console.log('error uploading file : ', err);
-    //   } else {
-    //     console.log('file uploaded');
-    //   }
-    // });
-    // fileComment = "";
-    // $('#shareModal').modal('hide');
+  uploadFiles = (modalId) => {
+    if (!this.channelId && !this.fileComment && this.uploadedFiles.length) {
+      return;
+    }
+    this.commonService.loaderShow();
+    this.api.sendFile(this.channelId, this.fileComment, this.uploadedFiles).subscribe((response) => {
+      if (response.success) {
+        response.message.message_profile_statuses.forEach(element => {
+          if (element.profile_id !== this.currentUser.current_profile.id) {
+            this.chatService.push(`simmpli-chat`, `new-message-${element.profile_id}`, response.message);
+          }
+        });
+        this.modalService.close(modalId);
+
+        response.message.profile = response.message.profile ? response.message.profile : '';
+        this.messages.push(response.message);
+        this.ref.detectChanges();
+        this.scrollToBottom();
+        this.commonService.loaderHide();
+
+        this.fileComment = "";
+        console.log('file uploaded');
+      } else {
+
+        console.log('error uploading file : ');
+      }
+    });
   }
 
   // mousetrap.bind(['command+t', 'ctrl+t'], function() {

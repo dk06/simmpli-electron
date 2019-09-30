@@ -36,19 +36,6 @@
               [(ngModel)]="selectedUsers" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
               (onSelectAll)="onSelectAll($event)" [ngModelOptions]="{standalone: true}">
             </ng-multiselect-dropdown>
-            <!-- <label for="purpose">Select People</label>
-            <div class="selected-people" *ngFor="let user of filteredUsers">
-              <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name" style="
-              width: -webkit-fill-available;" (click)="myVar()">
-              <input type="checkbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]" hidden [ngModelOptions]="{standalone: true}">
-
-            </div>
-            <div class="people-list" *ngIf="myvalue">
-              <div id="myUL" class="people-list-item" *ngFor="let user of filteredUsers">
-                <input type="checkbox" [value]=user ng-false-value="" [(ngModel)]="selectedUsers[$index]" hidden [ngModelOptions]="{standalone: true}">
-                <span>{{user.full_name}}</span>
-              </div>
-            </div> -->
             <small id="name" class="form-text text-muted">Select up to 1000 people to add this channel.</small>
           </div>
           <div class="form-group" style="display:flex; justify-content: space-between">

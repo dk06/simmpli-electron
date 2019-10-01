@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     if (!this.userForm.value.email && !this.userForm.value.email) {
       return;
     }
-    this.api.login(this.userForm.value).subscribe(async (response) => {
+    this.api.login(this.userForm.value).subscribe(async (response : any) => {
       if (response.success) {
         response.user.online = false;
         localStorage.setItem('user', JSON.stringify(response.user));

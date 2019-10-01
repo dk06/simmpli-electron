@@ -56,23 +56,20 @@ export class CommonService {
 
   notify(type, title, body) {
     console.log('Notification: ', type, title, body);
+    let user = JSON.parse(localStorage.getItem("user"));
 
-    // toaster.pop({
-    //     type: 'success',
-    //     title: title,
-    //     body: body
-    // });
+    if (user) {
+      let myNotification = new Notification(title, {
+        body: body,
+        icon: '../../assets/image/simmpli-64x64.png',
+        dir: 'ltr'
+      });
 
-    let myNotification = new Notification(title, {
-      body: body,
-      icon : '../../assets/image/simmpli-64x64.png',
-      dir : 'ltr'
-    });
+      console.log(myNotification);
+      this.noise.play();
+    }
 
-    console.log(myNotification);
-    // console.log('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
 
-    this.noise.play();
   };
 
   loaderShow() {

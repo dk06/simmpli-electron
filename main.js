@@ -3,12 +3,20 @@ const electron = require('electron')
 const path = require("path");
 const url = require("url");
 
+const { protocol } = require('electron');
+const nfs = require('fs');
+const npjoin = require('path').join;
+const es6Path = npjoin(__dirname, 'www');
+
 let win, serve, isQuiting;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
 const nativeImage = electron.nativeImage;
 let icon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'simmpli-64x64.png'));
+
+protocol.registerSchemesAsPrivileged([{ scheme: 'es6', privileges: { standard: true, secure: true } }])
+
 
 function createWindow() {
 
@@ -84,7 +92,16 @@ try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+  app.on('ready', async()=>{
+    protocol.registerBufferProtocol('es6', (req, cb) => {
+      nfs.readFile(
+        npjoin(es6Path, req.url.replace('es6://', '')),
+        (e, b) => { cb({ mimeType: 'text/javascript', data: b }) }
+      )
+    })
+
+    await createWindow();
+  });
 
   app.on('before-quit', function () {
     app.isQuiting = true;

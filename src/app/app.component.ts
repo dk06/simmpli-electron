@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
       console.log("---------------------------------");
       message.relevant_profiles.forEach(element => {
         if (this.user.current_profile.id === parseInt(element)) {
-          this.commonService.notify("success", message.title, message.desc);
+          this.commonService.notify("success", message.title, message.desc ? message.desc : "Work log stop");
         }
       });
     });
@@ -257,7 +257,9 @@ export class AppComponent implements OnInit {
 
         await this.getChannels();
 
-        await this.transitionToDM(anotherUser);
+        setTimeout(() => {
+          this.transitionToDM(anotherUser);
+        }, 3000);
         // await this.commonService.callChatData(res.channel.id);
         // $state.go("dashboard.channel-chat-window", {
         //   channelId: res.id,

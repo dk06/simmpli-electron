@@ -227,7 +227,22 @@ export class ChatRoomComponent implements OnInit {
     if (!this.channelId && !this.fileComment && this.uploadedFiles.length) {
       return;
     }
-    this.commonService.loaderShow();
+    // this.commonService.loaderShow();
+
+    let message = {
+      profile: {
+        full_name: this.currentUser.current_profile.full_name,
+        dp_url_small: this.currentUser.current_profile.dp_url_small
+      },
+      body: this.newMsg,
+      created_at: new Date(),
+      message_attachments: []
+    }
+    this.messages.push(message);
+    this.ref.detectChanges();
+    this.scrollToBottom();
+    this.modalService.close(modalId);
+
     this.api.sendFile(this.channelId, this.fileComment, this.uploadedFiles).subscribe((response) => {
       if (response.success) {
         response.message.message_profile_statuses.forEach(element => {
@@ -235,13 +250,13 @@ export class ChatRoomComponent implements OnInit {
             this.chatService.push(`simmpli-chat`, `new-message-${element.profile_id}`, response.message);
           }
         });
-        this.modalService.close(modalId);
+        // this.modalService.close(modalId);
 
-        response.message.profile = response.message.profile ? response.message.profile : '';
-        this.messages.push(response.message);
-        this.ref.detectChanges();
-        this.scrollToBottom();
-        this.commonService.loaderHide();
+        // response.message.profile = response.message.profile ? response.message.profile : '';
+        // this.messages.push(response.message);
+        // this.ref.detectChanges();
+        // this.scrollToBottom();
+        // this.commonService.loaderHide();
 
         this.fileComment = "";
         console.log('file uploaded');
@@ -289,7 +304,21 @@ export class ChatRoomComponent implements OnInit {
         profile_id: mention.profile_id
       };
     });
-    this.commonService.loaderShow();
+    // this.commonService.loaderShow();
+
+    let message = {
+      profile: {
+        full_name: this.currentUser.current_profile.full_name,
+        dp_url_small: this.currentUser.current_profile.dp_url_small
+      },
+      body: this.newMsg,
+      created_at: new Date(),
+      message_attachments: []
+    }
+    this.messages.push(message);
+    this.ref.detectChanges();
+    this.scrollToBottom();
+
     this.api.sendMessage(this.channelId, this.newMsg, this.mentions).subscribe((response) => {
       if (response.success) {
         console.log("received");
@@ -298,11 +327,6 @@ export class ChatRoomComponent implements OnInit {
             this.chatService.push(`simmpli-chat`, `new-message-${element.profile_id}`, response.message);
           }
         });
-        response.message.profile = response.message.profile ? response.message.profile : '';
-        this.messages.push(response.message);
-        this.ref.detectChanges();
-        this.scrollToBottom();
-        this.commonService.loaderHide();
 
         // this.pageNo++;
         // this.getUserChats(this.channelId);

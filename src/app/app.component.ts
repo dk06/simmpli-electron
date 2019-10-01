@@ -44,11 +44,14 @@ export class AppComponent implements OnInit {
     this.checkUser();
     this.commonService.online.subscribe(() => {
       $('#networkCheck').removeClass('disable-div');
+      this.checkUser();
+      this.user.online = true;
     });
 
     this.commonService.offline.subscribe(() => {
       $('#networkCheck').addClass('disable-div');
       this.checkUser();
+      this.user.online = false;
     });
 
     simmpliChannel.bindEvent('notification', (message) => {
@@ -81,6 +84,7 @@ export class AppComponent implements OnInit {
 
       if (this.isLoggedIn) {
         this.user = JSON.parse(localStorage.getItem("user"));
+        this.user.online = true;
 
         this.getChannels();
         this.getUsers();

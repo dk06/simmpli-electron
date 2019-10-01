@@ -33,7 +33,7 @@ export class CommonService {
     private toastr: ToastrManager
   ) {
 
-    this.noise.src = '../../assets/sounds/to-the-point.mp3';
+    this.noise.src = '/../../assets/sounds/to-the-point.mp3';
     this.noise.load();
     this.online = Observable.fromEvent(window, 'online');
     this.offline = Observable.fromEvent(window, 'offline');

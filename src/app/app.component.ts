@@ -55,7 +55,11 @@ export class AppComponent implements OnInit {
       console.log("---------------------------------");
       console.log('simmpli notification: ', message);
       console.log("---------------------------------");
-      this.commonService.notify("success", message.title, message.desc)
+      message.relevant_profiles.forEach(element => {
+        if (this.user.current_profile.id === parseInt(element)) {
+          this.commonService.notify("success", message.title, message.desc);
+        }
+      });
     });
 
     w3channel.bindEvent('new-user', (userDetails) => {

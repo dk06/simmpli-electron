@@ -10,8 +10,8 @@ export class ApiService {
 
   // baseUrl: String = 'http://192.168.1.34:3002';
 
-  // baseUrl: any = 'http://localhost:3000';
-  baseUrl: any = 'http://simmpli.com';
+  baseUrl: any = 'http://localhost:3000';
+  // baseUrl: any = 'http://simmpli.com';
 
   constructor(private http: Http) {
     console.log("connected Login");

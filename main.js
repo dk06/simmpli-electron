@@ -14,13 +14,15 @@ serve = args.some(val => val === '--serve');
 
 const nativeImage = electron.nativeImage;
 let icon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'simmpli-64x64.png'));
+let trayIcon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'tray.png'));
+
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'es6', privileges: { standard: true, secure: true } }])
 
 
 function createWindow() {
 
-  appIcon = new Tray(icon)
+  appIcon = new Tray(trayIcon)
 
   const contextMenu = Menu.buildFromTemplate([
       { label: 'Show App', click:  function(){

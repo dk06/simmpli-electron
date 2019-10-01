@@ -12,6 +12,8 @@ let win, serve, isQuiting;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
+console.log('serve', serve)
+
 const nativeImage = electron.nativeImage;
 let icon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'simmpli-64x64.png'));
 let trayIcon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'tray.png'));
@@ -69,7 +71,7 @@ function createWindow() {
   }
 
   if (serve) {
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
   }
 
   // Emitted when the window is closed.

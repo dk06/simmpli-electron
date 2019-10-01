@@ -41,8 +41,8 @@
         <div class="message-data" id="message-{{message.id}}">
           <div class="">
             <div class="profile-pic-div float-left">
-              <img src="{{urlBase +  message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}"
-                alt="PP" onError="this.src='./assets/image/user.png'" class="user-pic-small">
+              <img src="{{ message.profile ?  message.profile.dp_url_small : './assets/image/user.png'}}" alt="PP"
+                onError="this.src='./assets/image/user.png'" class="user-pic-small">
             </div>
             <div class="message-div float-left">
               <span class="message-data-name">{{message.profile ? message.profile.full_name : '--'}}</span>
@@ -54,8 +54,7 @@
               <div class="message-attachment" *ngFor="let attachment of message.message_attachments">
                 <div class="attachment-name">
                   <span>
-                    <a class="" href="{{urlBase + attachment.attachment_url}}"
-                      download="{{attachment.attachment_file_name}}">
+                    <a class="" href="{{attachment.attachment_url}}" download="{{attachment.attachment_file_name}}">
                       <i class="fa fa-download"></i>
                     </a>
                   </span>

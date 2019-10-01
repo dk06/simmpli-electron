@@ -147,7 +147,7 @@ export class ChatRoomComponent implements OnInit {
     }
   }
   getUserChats(channelId) {
-    if(channelId){
+    if(!channelId){
       return;
     }
     this.commonService.loaderShow();

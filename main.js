@@ -7,26 +7,26 @@ let win, serve, isQuiting;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-// const nativeImage = electron.nativeImage;
-// let appIcon = nativeImage.createFromPath(path.join(__dirname, 'app', 'assets', 'image', 'simmpli-64x64.png'));
+const nativeImage = electron.nativeImage;
+let icon = nativeImage.createFromPath(path.join(__dirname, 'dist', 'assets', 'image', 'simmpli-64x64.png'));
 
 function createWindow() {
 
-//   // appIcon = new Tray(__dirname + "/src/app/assets/image/simmpli-64x64.png")
-//   appIcon = new Tray(__dirname + "/assets/image/simmpli-64x64.png")
+  appIcon = new Tray(icon)
 
-//   const contextMenu = Menu.buildFromTemplate([
-//       { label: 'Show App', click:  function(){
-//           win.show();
-//       } },
-//       { label: 'Quit', click:  function(){
-//           application.isQuiting = true;
-//           application.quit();
-//       } }
-//  ]);
+  const contextMenu = Menu.buildFromTemplate([
+      { label: 'Show App', click:  function(){
+          win.show();
+      } },
+      { label: 'Quit', click:  function(){
+          app.isQuiting = true;
+          app.quit();
+      } }
+ ]);
 
-//   appIcon.setToolTip('This is my application.')
-//   appIcon.setContextMenu(contextMenu)
+app.setBadgeCount(6);
+  // appIcon.setToolTip('This is my application.')
+  appIcon.setContextMenu(contextMenu)
 
   const {
     width,
@@ -39,7 +39,7 @@ function createWindow() {
     y: 0,
     width: width,
     height: height,
-    // icon: appIcon,
+    icon: icon,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -64,10 +64,11 @@ function createWindow() {
 
   // Emitted when the window is closed.
   win.on('close', (event) => {
-    if (isQuiting) {
+    if (app.isQuiting) {
       console.log('app close');
 
       win = null
+      app.quit();
     } else {
       console.log('app working background');
 
@@ -86,7 +87,7 @@ try {
   app.on('ready', createWindow);
 
   app.on('before-quit', function () {
-    isQuiting = true;
+    app.isQuiting = true;
   });
 
   // Quit when all windows are closed.

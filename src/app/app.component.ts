@@ -62,10 +62,12 @@ export class AppComponent implements OnInit {
       console.log('new user logged in', userDetails);
       this.user.online = true;
 
-      let index = this.filteredUsers.findIndex(i => i.id == userDetails.id);
-      if (index >= 0) {
-        this.filteredUsers[index].online = true;
-        this.ref.detectChanges();
+      if (this.filteredUsers) {
+        let index = this.filteredUsers.findIndex(i => i.id == userDetails.id);
+        if (index >= 0) {
+          this.filteredUsers[index].online = true;
+          this.ref.detectChanges();
+        }
       }
 
     });

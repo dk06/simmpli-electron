@@ -9,8 +9,6 @@ import "rxjs/add/observable/throw";
 import "rxjs/add/observable/fromEvent";
 import { ChatService } from './chat.service';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +18,7 @@ export class CommonService {
   public getChatData: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public selectCuttentUser: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
+  public noise = new Audio();
 
   public online: Observable<any>;
   public offline: Observable<any>;
@@ -31,6 +30,8 @@ export class CommonService {
     private spinner: NgxSpinnerService
   ) {
 
+    this.noise.src = '../../assets/sounds/to-the-point.mp3';
+    this.noise.load();
     this.online = Observable.fromEvent(window, 'online');
     this.offline = Observable.fromEvent(window, 'offline');
     console.log("connected Login");
@@ -63,13 +64,15 @@ export class CommonService {
     // });
 
     let myNotification = new Notification(title, {
-      body: body
+      body: body,
+      icon : '../../assets/image/simmpli-64x64.png',
+      dir : 'ltr'
     });
 
     console.log(myNotification);
     // console.log('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
-    // const noise = new Audio('/simmpli-electron/app/assets/sounds/to-the-point.mp3');
-    // noise.play();
+
+    this.noise.play();
   };
 
   loaderShow() {

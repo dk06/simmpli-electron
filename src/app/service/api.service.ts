@@ -10,7 +10,8 @@ export class ApiService {
 
   // baseUrl: String = 'http://192.168.1.34:3002';
 
-  baseUrl: any = 'http://localhost:3000';
+  // baseUrl: any = 'http://localhost:3000';
+  baseUrl: any = 'http://simmpli.com';
 
   constructor(private http: Http) {
     console.log("connected Login");
@@ -56,9 +57,9 @@ export class ApiService {
     // let formData = new FormData();
 
     if (files && files.length) {
-      files.forEach(file => {
-        data.message.message_attachments_attributes.push({ attachment: file });
-      });
+      for (let i = 0; i < files.length; i++) {
+        data.message.message_attachments_attributes.push({ attachment: files[i] });
+      }
     }
 
 

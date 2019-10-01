@@ -147,6 +147,9 @@ export class ChatRoomComponent implements OnInit {
     }
   }
   getUserChats(channelId) {
+    if(channelId){
+      return;
+    }
     this.commonService.loaderShow();
     this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
 

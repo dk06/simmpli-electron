@@ -20,6 +20,9 @@ import { NewChannelComponent } from './components/new-channel/new-channel.compon
 import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './service/modal.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ng6-toastr-notifications';
+
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     HttpModule,
     NgxSpinnerModule,
     UiSwitchModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [CommonService, ChatService, ApiService, ModalService],
   bootstrap: [AppComponent]

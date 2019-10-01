@@ -3,11 +3,13 @@ import { Http, Response, Headers } from "@angular/http";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs';
+import { ToastrManager } from 'ng6-toastr-notifications';
 import 'rxjs/add/operator/map';
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import "rxjs/add/observable/fromEvent";
 import { ChatService } from './chat.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,8 @@ export class CommonService {
   constructor(
     private http: Http,
     private chatService: ChatService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private toastr: ToastrManager
   ) {
 
     this.noise.src = '../../assets/sounds/to-the-point.mp3';
@@ -68,10 +71,29 @@ export class CommonService {
       console.log(myNotification);
       this.noise.play();
     }
-
-
   };
 
+  showSuccess(msg) {
+    this.toastr.successToastr(msg, 'Success!');
+  }
+
+  showError(msg) {
+    this.toastr.errorToastr(msg, 'Oops!');
+  }
+
+  showWarning(msg) {
+    this.toastr.warningToastr(msg, 'Alert!');
+  }
+
+  showInfo(msg) {
+    this.toastr.infoToastr(msg, 'Info');
+  }
+
+  showToast(position: any = 'top-left') {
+    this.toastr.infoToastr('This is a toast.', 'Toast', {
+      position: position
+    });
+  }
   loaderShow() {
     this.spinner.show();
   }

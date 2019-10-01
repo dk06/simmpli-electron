@@ -41,15 +41,18 @@ export class LoginComponent implements OnInit {
     if (!this.userForm.value.email && !this.userForm.value.email) {
       return;
     }
-    this.api.login(this.userForm.value).subscribe(async (response : any) => {
+    this.api.login(this.userForm.value).subscribe(async (response: any) => {
       if (response.success) {
         response.user.online = false;
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('auth_token', response.authorization.token);
-
+        // this.commonService.notify('success', 'Success', 'Login successfully..');
+        this.commonService.showSuccess(response.message);
         await this.commonService.setCurrentUser(response.user);
         await this.route.navigate(['/chat-room']);
       } else {
+        this.commonService.showWarning(response.message);
+
         console.log('not login');
       }
     }, error => {

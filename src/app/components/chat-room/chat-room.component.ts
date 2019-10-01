@@ -122,7 +122,11 @@ export class ChatRoomComponent implements OnInit {
     this.messages = [];
     this.currentChannel = JSON.parse(localStorage.getItem('last_active_channel'));
     if (this.currentChannel) {
-      this.commonService.selectUser(this.currentChannel.id);
+      if (this.currentChannel.channel_type == "public") {
+        this.commonService.selectUser(this.currentChannel.id);
+      } else {
+        this.commonService.selectUser(this.currentChannel.channel_profiles[0].profile_id);
+      }
       this.channelId = this.currentChannel.id;
       this.ref.detectChanges();
       this.getUserChats(this.currentChannel.id);

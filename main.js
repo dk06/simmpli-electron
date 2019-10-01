@@ -32,7 +32,7 @@ function createWindow() {
       } }
  ]);
 
-app.setBadgeCount(6);
+  // app.setBadgeCount(6);
   // appIcon.setToolTip('This is my application.')
   appIcon.setContextMenu(contextMenu)
 

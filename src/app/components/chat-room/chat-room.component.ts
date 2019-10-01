@@ -124,7 +124,7 @@ export class ChatRoomComponent implements OnInit {
     if (this.currentChannel) {
       this.commonService.selectUser(this.currentChannel.id);
       this.channelId = this.currentChannel.id;
-
+      this.ref.detectChanges();
       this.getUserChats(this.currentChannel.id);
     }
   }
@@ -147,7 +147,7 @@ export class ChatRoomComponent implements OnInit {
     }
   }
   getUserChats(channelId) {
-    if(!channelId){
+    if (!channelId) {
       return;
     }
     this.commonService.loaderShow();
@@ -167,6 +167,7 @@ export class ChatRoomComponent implements OnInit {
 
         await this.scrollToBottom();
         await this.messages.sort((a, b) => a.id - b.id);
+        this.ref.detectChanges();
         // await this.messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
 

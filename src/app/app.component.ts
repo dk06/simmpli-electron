@@ -216,6 +216,7 @@ export class AppComponent implements OnInit {
     });
 
     if (channel) {
+      this.commonService.loaderHide();
       localStorage.setItem('last_active_channel', JSON.stringify(channel));
       this.commonService.callChatData(channel);
     } else {
@@ -253,11 +254,11 @@ export class AppComponent implements OnInit {
             channel: this.currentChannel
           });
         });
-        this.commonService.loaderHide();
 
-        this.getChannels();
+        await this.getChannels();
 
-        await this.commonService.callChatData(res.channel.id);
+        await this.transitionToDM(anotherUser);
+        // await this.commonService.callChatData(res.channel.id);
         // $state.go("dashboard.channel-chat-window", {
         //   channelId: res.id,
         //   channel: res

@@ -12,6 +12,7 @@ import { ValidationService } from 'src/app/service/validation.service';
 export class LoginComponent implements OnInit {
 
   userForm: any;
+  btnDisabled: boolean = false;
 
   constructor(
     private route: Router,
@@ -41,7 +42,16 @@ export class LoginComponent implements OnInit {
     if (!this.userForm.value.email && !this.userForm.value.email) {
       return;
     }
+
+    if (this.btnDisabled) {
+      return;
+    }
+    this.btnDisabled = true;
+    this.commonService.loaderShow();
     this.api.login(this.userForm.value).subscribe(async (response: any) => {
+      this.commonService.loaderHide();
+      this.btnDisabled = false;
+
       if (response.success) {
         response.user.online = false;
         localStorage.setItem('user', JSON.stringify(response.user));
@@ -56,6 +66,9 @@ export class LoginComponent implements OnInit {
         console.log('not login');
       }
     }, error => {
+      this.commonService.loaderHide();
+      this.btnDisabled = false;
+
       console.log('error', error);
     });
 
